@@ -1,4 +1,4 @@
-export interface IMap {
+export interface IMapServerModel {
     //Collisions: null
     Description: string;
     Height: number;

@@ -1,7 +1,7 @@
 import { EngineMediator } from "./EngineMediator";
 import { IRenderObject } from "./interfaces/IRenderObject";
 import { EngineStore } from "../store/EngineStore";
-import { ICharacter } from "../servcer/interfaces/serverModels/ICharacter";
+import { ICharacterServerModel } from "../servcer/interfaces/serverModels/ICharacterServerModel";
 import { AnimatedValue } from "./AnimatedValue";
 
 export class Character {
@@ -38,10 +38,10 @@ export class Character {
         this.engineMediator = engineMediator;
         this.engineStore = engineStore;
 
-        this.engineMediator.registerHandler('Character::Load', (character: ICharacter) => {
-            this.id = character.Id;
-            this.positionX = character.PositionX;
-            this.positionY = character.PositionY;
+        this.engineMediator.registerHandler('Character::Load', (characterServerModel: ICharacterServerModel) => {
+            this.id = characterServerModel.Id;
+            this.positionX = characterServerModel.PositionX;
+            this.positionY = characterServerModel.PositionY;
 
             const { x, y } = this.calculatedCharacterPosition();
             
@@ -52,7 +52,7 @@ export class Character {
             this.animatedPositionY.reset(y);
 
             this.image = new Image();
-            this.image.src = character.Outfit;
+            this.image.src = characterServerModel.Outfit;
 
             this.engineMediator.publish({
                 type: 'Character::Loaded',

@@ -1,9 +1,9 @@
-import { IMap } from "../serverModels/IMap";
-import { ICharacter } from "../serverModels/ICharacter";
-import { IOtherCharacter } from "../serverModels/IOtherCharacter";
+import { IMapServerModel } from "../serverModels/IMapServerModel";
+import { ICharacterServerModel } from "../serverModels/ICharacterServerModel";
+import { IOtherCharacterServerModel } from "../serverModels/IOtherCharacterServerModel";
 
 export interface IGameLoadedResponse {
-    Character: ICharacter;
-    OtherCharacters: IOtherCharacter[];
-    Map: IMap;
+    Character: ICharacterServerModel;
+    OtherCharacters: IOtherCharacterServerModel[];
+    Map: IMapServerModel;
 }

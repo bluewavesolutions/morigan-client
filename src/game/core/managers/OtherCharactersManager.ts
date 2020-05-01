@@ -2,7 +2,7 @@ import { EngineMediator } from "../EngineMediator";
 import { OtherCharacter } from "../OtherCharacter";
 import { IOtherCharacterMovedResponse } from "../../servcer/interfaces/responses/IOtherCharacterMovedResponse";
 import { IRenderObject } from "../interfaces/IRenderObject";
-import { IOtherCharacter } from "../../servcer/interfaces/serverModels/IOtherCharacter";
+import { IOtherCharacterServerModel } from "../../servcer/interfaces/serverModels/IOtherCharacterServerModel";
 import { Character } from "../Character";
 
 export class OtherCharactersManager {
@@ -15,7 +15,7 @@ export class OtherCharactersManager {
         this.engineMediator = engineMediator;
         this.character = character;
 
-        this.engineMediator.registerHandler('OtherCharactersManager::Load', (data: IOtherCharacter) => {
+        this.engineMediator.registerHandler('OtherCharactersManager::Load', (data: IOtherCharacterServerModel) => {
             let findIndex = this.otherCharacters.findIndex(e => e.id == data.Id);
             if(findIndex >= 0) {
                 return;

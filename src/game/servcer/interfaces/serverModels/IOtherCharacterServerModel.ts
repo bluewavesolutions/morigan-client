@@ -1,4 +1,4 @@
-export interface IOtherCharacter {
+export interface IOtherCharacterServerModel {
     Id: number,
     Nick: string,
     Outfit: string,

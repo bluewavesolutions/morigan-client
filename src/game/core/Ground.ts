@@ -1,8 +1,6 @@
 import { EngineMediator } from "./EngineMediator";
 import { IMapObject } from "./interfaces/IMapObject";
-import { IMap } from "../servcer/interfaces/serverModels/IMap";
-import { ICharacter } from "../servcer/interfaces/serverModels/ICharacter";
-import { AnimatedValue } from "./AnimatedValue";
+import { IMapServerModel } from "../servcer/interfaces/serverModels/IMapServerModel";
 import { Character } from "./Character";
 
 export class Ground {
@@ -17,12 +15,12 @@ export class Ground {
         this.engineMediator = engineMediator;
         this.character = character;
 
-        this.engineMediator.registerHandler('Ground::Load', (data: IMap) => {
-            this.widthInPixels = data.WidthInPixels;
-            this.heightInPixels = data.HeightInPixels;
+        this.engineMediator.registerHandler('Ground::Load', (mapServerModel: IMapServerModel) => {
+            this.widthInPixels = mapServerModel.WidthInPixels;
+            this.heightInPixels = mapServerModel.HeightInPixels;
 
             this.image = new Image();
-            this.image.src = data.ResourceFile;
+            this.image.src = mapServerModel.ResourceFile;
 
             const { x,y } = this.calculatedMapPosition();
 
