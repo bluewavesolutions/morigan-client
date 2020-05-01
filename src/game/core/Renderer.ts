@@ -2,20 +2,26 @@ import { EngineMediator } from "./EngineMediator";
 import { IRenderObject } from "./interfaces/IRenderObject";
 import { Ground } from "./Ground";
 import { Character } from "./Character";
+import { OtherCharactersManager } from "./managers/OtherCharactersManager";
 
 export class Renderer {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private character: Character;
     private ground: Ground;
+    private otherCharactersManager: OtherCharactersManager;
 
-    private orderedRenderObjects: IRenderObject[] = [];
-
-    constructor(canvas: HTMLCanvasElement, engineMediator: EngineMediator, ground: Ground, character: Character) {
+    constructor(canvas: HTMLCanvasElement, 
+        engineMediator: EngineMediator, 
+        ground: Ground, 
+        character: Character,
+        otherCharactersManager: OtherCharactersManager) 
+    {
         this.canvas = canvas;
         this.context = canvas.getContext('2d') as CanvasRenderingContext2D;
         this.character = character;
         this.ground = ground;
+        this.otherCharactersManager = otherCharactersManager;
 
         window.addEventListener('load', () => {
             this.canvas.width = window.innerWidth;
@@ -26,10 +32,6 @@ export class Renderer {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
         }, false);
-
-        engineMediator.registerHandler('ENGINE_ADD_OBJECT_TO_RENDERER', (renderObject: IRenderObject) => {
-            this.orderedRenderObjects.push(renderObject);
-        });
     }
 
     public start() {
@@ -39,7 +41,7 @@ export class Renderer {
     }
 
     private render(time: number) {
-        const { context, orderedRenderObjects } = this;
+        const { context, otherCharactersManager } = this;
 
         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
         if(this.ground.isLoaded()) {
@@ -50,7 +52,7 @@ export class Renderer {
             context.drawImage(ground.image, ground.dx.currentValue(), ground.dy.currentValue());
         }
 
-        for(let renderObject of orderedRenderObjects) {
+        for(let renderObject of otherCharactersManager.getCharacterRenderObjects()) {
             renderObject.dx.updateOnRedner(time);
             renderObject.dy.updateOnRedner(time);
 

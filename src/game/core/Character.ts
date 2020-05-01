@@ -37,6 +37,11 @@ export class Character {
 
             this.characterImage = new Image();
             this.characterImage.src = character.Outfit;
+
+            this.engineMediator.publish({
+                type: 'Character::Loaded',
+                data: {}
+            });
         });
 
         this.engineMediator.registerHandler('Ground::Loaded', (data: any) => {
@@ -106,7 +111,7 @@ export class Character {
             }
 
             this.engineMediator.publish({
-                type: 'SERVER_SEND_MESSAGE',
+                type: 'Server::SendMessage',
                 data: {
                     Type: 'MOVE',
                     Data: {

@@ -18,18 +18,18 @@ export class Server {
         //http://localhost:8989/
         //"wss://game-alpha.morigan.pl/ws"
 
-        this.engineMediator.registerHandler('SERVER_SEND_MESSAGE', (data: IServerCommunicationFrame) => {
+        this.engineMediator.registerHandler('Server::SendMessage', (data: IServerCommunicationFrame) => {
             this.webSocket?.send(JSON.stringify(data));
         });
 
         this.webSocket.onopen = (event: Event) => {
             this.engineMediator.publish({
-                type: 'SERVER_ON_SOCKET_OPEN',
+                type: 'Server::OnSocketOpen',
                 data: event
             });
 
             this.engineMediator.publish({
-                type: 'SERVER_SEND_MESSAGE',
+                type: 'Server::SendMessage',
                 data: {
                     Type: 'LOAD_GAME',
                     Data: {
@@ -42,14 +42,14 @@ export class Server {
 
         this.webSocket.onclose = (event: CloseEvent) => {
             this.engineMediator.publish({
-                type: 'SERVER_ON_SOCKET_CLOSE',
+                type: 'Server::OnSocketClose',
                 data: event
             });
         }
 
         this.webSocket.onmessage = (event: MessageEvent) => {
             this.engineMediator.publish({
-                type: 'SERVER_RECEIVE_MESSAGE',
+                type: 'Server::OnMessage',
                 data: event.data as IServerCommunicationFrame
             });
         }

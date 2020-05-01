@@ -3,6 +3,6 @@ import { ICharacter } from "../serverModels/ICharacter";
 
 export interface IGameLoadedResponse {
     Character: ICharacter;
-    OhterCharacters: any;
+    OtherCharacters: any;
     Map: IMap;
 }

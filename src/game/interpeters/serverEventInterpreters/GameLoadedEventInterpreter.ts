@@ -12,21 +12,29 @@ export class GameLoadedEventInterpreter implements IServerEventInterpreter<IGame
         this.engineStore = engineStore;
     }
 
-    public execute(data: IGameLoadedResponse) {
+    public async execute(data: IGameLoadedResponse) : Promise<void> {
         console.log(data);
 
-        this.engineMediator.publish({ 
+        await this.engineMediator.publish({ 
             type: 'Character::Load', 
             data: data.Character
         });
 
-        this.engineMediator.publish({ 
+        await this.engineMediator.publish({ 
             type: 'Ground::Load', 
             data: {
                 map: data.Map,
                 character: data.Character
             }
         });
+
+        for (let index in data.OtherCharacters) {
+            console.log(data.OtherCharacters[index]);
+            await this.engineMediator.publish({ 
+                type: 'OtherCharactersManager::Load', 
+                data: data.OtherCharacters[index]
+            });
+        }
 
         this.engineStore.session = data.Character.SessionToken;
         console.log(this.engineStore);
