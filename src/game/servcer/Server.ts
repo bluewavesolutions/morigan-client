@@ -1,4 +1,4 @@
-import { EngineMediator } from "../core/EngineMediator";
+import { EngineMediator } from "../utils/EngineMediator";
 import { IServerCommunicationFrame } from "./interfaces/IServerCommunicationFrame";
 import { ILoadGameRequest } from './interfaces/requests/ILoadGameRequest';
 import { EngineStore } from "../store/EngineStore";

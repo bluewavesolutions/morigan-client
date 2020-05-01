@@ -1,4 +1,4 @@
-import { EngineMediator } from "../core/EngineMediator";
+import { EngineMediator } from "../utils/EngineMediator";
 import { IServerCommunicationFrame } from "../servcer/interfaces/IServerCommunicationFrame";
 import { IServerEventInterpreter } from "./interfaces/ISeverEventInterpreter";
 import { GameLoadedEventInterpreter } from "./serverEventInterpreters/GameLoadedEventInterpreter";

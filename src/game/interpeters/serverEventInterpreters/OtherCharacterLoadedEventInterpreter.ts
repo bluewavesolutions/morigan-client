@@ -1,6 +1,6 @@
 import { IOtherCharacterLoadedResponse } from "../../servcer/interfaces/responses/IOtherCharacterLoadedResponse";
 import { IServerEventInterpreter } from "../interfaces/ISeverEventInterpreter";
-import { EngineMediator } from "../../core/EngineMediator";
+import { EngineMediator } from "../../utils/EngineMediator";
 
 export class OtherCharacterLoadedEventInterpreter implements IServerEventInterpreter<IOtherCharacterLoadedResponse> {
     private engineMediator: EngineMediator;

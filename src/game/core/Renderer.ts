@@ -1,4 +1,4 @@
-import { EngineMediator } from "./EngineMediator";
+import { EngineMediator } from "../utils/EngineMediator";
 import { IRenderObject } from "./interfaces/IRenderObject";
 import { Ground } from "./Ground";
 import { Character } from "./Character";

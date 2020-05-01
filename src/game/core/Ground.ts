@@ -1,4 +1,4 @@
-import { EngineMediator } from "./EngineMediator";
+import { EngineMediator } from "../utils/EngineMediator";
 import { IMapObject } from "./interfaces/IMapObject";
 import { IMapServerModel } from "../servcer/interfaces/serverModels/IMapServerModel";
 import { Character } from "./Character";

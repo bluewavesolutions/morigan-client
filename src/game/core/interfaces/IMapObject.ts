@@ -1,4 +1,4 @@
-import { AnimatedValue } from "../AnimatedValue";
+import { AnimatedValue } from "../../utils/AnimatedValue";
 
 export interface IMapObject {
     image: CanvasImageSource,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Renderer } from '../../game/core/Renderer';
-import { EngineMediator } from '../../game/core/EngineMediator';
+import { EngineMediator } from '../../game/utils/EngineMediator';
 import { Server } from '../../game/servcer/Server';
 import { ServerEventInterpreter } from '../../game/interpeters/ServerEventInterpreter';
 import { EngineStore } from '../../game/store/EngineStore';

@@ -1,4 +1,4 @@
-import { EngineMediator } from "../EngineMediator";
+import { EngineMediator } from "../../utils/EngineMediator";
 import { OtherCharacter } from "../OtherCharacter";
 import { IOtherCharacterMovedResponse } from "../../servcer/interfaces/responses/IOtherCharacterMovedResponse";
 import { IRenderObject } from "../interfaces/IRenderObject";

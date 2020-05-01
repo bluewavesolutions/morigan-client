@@ -1,4 +1,4 @@
-import { AnimatedValue } from "./AnimatedValue";
+import { AnimatedValue } from "../utils/AnimatedValue";
 import { IRenderObject } from "./interfaces/IRenderObject";
 import { Character } from "./Character";
 

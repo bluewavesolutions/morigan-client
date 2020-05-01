@@ -1,6 +1,6 @@
 import { IServerEventInterpreter } from "../interfaces/ISeverEventInterpreter";
 import { IGameLoadedResponse } from "../../servcer/interfaces/responses/IGameLoadedResponse";
-import { EngineMediator } from "../../core/EngineMediator";
+import { EngineMediator } from "../../utils/EngineMediator";
 import { EngineStore } from "../../store/EngineStore";
 
 export class GameLoadedEventInterpreter implements IServerEventInterpreter<IGameLoadedResponse> {
@@ -26,7 +26,6 @@ export class GameLoadedEventInterpreter implements IServerEventInterpreter<IGame
         });
 
         for (let index in data.OtherCharacters) {
-            console.log(data.OtherCharacters[index]);
             await this.engineMediator.publish({ 
                 type: 'OtherCharactersManager::Load', 
                 data: data.OtherCharacters[index]

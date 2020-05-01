@@ -1,4 +1,4 @@
-import { EngineMediator } from "./EngineMediator";
+import { EngineMediator } from "../utils/EngineMediator";
 
 export type Direction = 'up' | 'down' | 'left' | 'right' | null;
 

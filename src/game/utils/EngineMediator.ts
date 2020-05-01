@@ -1,4 +1,4 @@
-import { IGameEvent } from "./interfaces/IGameEvent";
+import { IGameEvent } from "../core/interfaces/IGameEvent";
 
 export class EngineMediator {
     private handlers: Map<string, any[]> = new Map();

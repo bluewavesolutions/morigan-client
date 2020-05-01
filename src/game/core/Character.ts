@@ -1,8 +1,8 @@
-import { EngineMediator } from "./EngineMediator";
+import { EngineMediator } from "../utils/EngineMediator";
 import { IRenderObject } from "./interfaces/IRenderObject";
 import { EngineStore } from "../store/EngineStore";
 import { ICharacterServerModel } from "../servcer/interfaces/serverModels/ICharacterServerModel";
-import { AnimatedValue } from "./AnimatedValue";
+import { AnimatedValue } from "../utils/AnimatedValue";
 
 export class Character {
     private engineMediator: EngineMediator;
@@ -73,36 +73,22 @@ export class Character {
             this.animatedPositionY.reset(y);
         });
 
-        this.engineMediator.registerHandler('Character::ChangedDirection', (data: string) => {
+        this.engineMediator.registerHandler('Character::ChangedDirection', (direction: string) => {
             const mapPositionXAlreadyAnimated = this.animatedMapPositionX.isAlreadyAnimated();
             const mapPositionYAlreadyAnimated = this.animatedMapPositionY.isAlreadyAnimated();
             const characterPositionXAlreadtAnimated = this.animatedPositionX.isAlreadyAnimated();
             const characterPositionYAlreadtAnimated = this.animatedPositionY.isAlreadyAnimated();
             
-            if (data === 'up') {
-                this.move(48 * 3);
+            this.move(direction);
 
-                if (mapPositionYAlreadyAnimated && characterPositionYAlreadtAnimated) {
-                    this.positionY--;
-                }
-            } else if (data === 'down') {
-                this.move(0);
-                
-                if (mapPositionYAlreadyAnimated && characterPositionYAlreadtAnimated) {
-                    this.positionY++;
-                }
-            } else if (data === 'left') {
-                this.move(48);
-
-                if (mapPositionXAlreadyAnimated && characterPositionXAlreadtAnimated) {
-                    this.positionX--;
-                }
-            } else if(data === 'right') {
-                this.move(48 * 2);
-                    
-                if (mapPositionXAlreadyAnimated && characterPositionXAlreadtAnimated) {
-                    this.positionX++;
-                }
+            if (direction === 'up' && mapPositionYAlreadyAnimated && characterPositionYAlreadtAnimated) {
+                this.positionY--;
+            } else if (direction === 'down' && mapPositionYAlreadyAnimated && characterPositionYAlreadtAnimated) {
+                this.positionY++;
+            } else if (direction === 'left' && mapPositionXAlreadyAnimated && characterPositionXAlreadtAnimated) {
+                this.positionX--;
+            } else if(direction === 'right' && mapPositionXAlreadyAnimated && characterPositionXAlreadtAnimated) {
+                this.positionX++;
             } else {
                 if (this.lastDirection === 'up') {
                     this.stepY = 48 * 3;
@@ -138,8 +124,24 @@ export class Character {
         });
     }
 
-    private move(y: number) {
-        this.stepY = y;
+    private move(direction: string) {
+        switch (direction) {
+            case 'up':
+                this.stepY = 48 * 3;
+                break;
+            case 'left':
+                this.stepY = 48;
+                break;
+            case 'down':
+                this.stepY = 0;
+                break;
+            case 'right':
+                this.stepY = 48 * 2;
+                break;
+            default:
+                break;
+        }
+
         this.stepX += 32;
         if(this.stepX >= 32*4) {
             this.stepX = 0;
