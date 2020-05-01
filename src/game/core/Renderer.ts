@@ -67,7 +67,7 @@ export class Renderer {
                 renderObject.dh);
         }
 
-        if(this.character.isLoaded()) {
+        if (this.character.isLoaded()) {
             const character = this.character.getCharacterRenderObject();
             character.dx.updateOnRedner(time);
             character.dy.updateOnRedner(time);

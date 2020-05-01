@@ -10,6 +10,8 @@ export class EngineMediator {
             return Promise.reject();
         }
 
+        console.log(`EngineMediator->${event.type}`);
+
         let prom: Promise<void>[] = [];
 
         let handlers = this.handlers.get(event.type) as any[];

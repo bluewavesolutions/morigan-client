@@ -38,10 +38,10 @@ class Game extends Component<IGameProps, IGameState> {
     const engineMediator = new EngineMediator();
     const canvas = this.canvasReference.current as HTMLCanvasElement;
 
-    const otherCharactersManager = new OtherCharactersManager(engineMediator);
-
     const character = new Character(engineMediator, engineStore);
-    const ground = new Ground(engineMediator);
+    const ground = new Ground(engineMediator, character);
+
+    const otherCharactersManager = new OtherCharactersManager(engineMediator, character);
 
     const renderer = new Renderer(canvas, engineMediator, ground, character, otherCharactersManager);
     renderer.start();

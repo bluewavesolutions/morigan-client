@@ -22,10 +22,7 @@ export class GameLoadedEventInterpreter implements IServerEventInterpreter<IGame
 
         await this.engineMediator.publish({ 
             type: 'Ground::Load', 
-            data: {
-                map: data.Map,
-                character: data.Character
-            }
+            data: data.Map
         });
 
         for (let index in data.OtherCharacters) {

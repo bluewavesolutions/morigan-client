@@ -3,22 +3,27 @@ import { IMapObject } from "./interfaces/IMapObject";
 import { IMap } from "../servcer/interfaces/serverModels/IMap";
 import { ICharacter } from "../servcer/interfaces/serverModels/ICharacter";
 import { AnimatedValue } from "./AnimatedValue";
+import { Character } from "./Character";
 
 export class Ground {
     private engineMediator: EngineMediator;
-    private map: IMap | undefined;
-    private character: ICharacter | undefined;
-    private mapImage: HTMLImageElement | undefined;
+    private character: Character;
+    private image: HTMLImageElement | undefined;
 
-    constructor(engineMediator: EngineMediator) {
+    private widthInPixels: number = 0;
+    private heightInPixels: number = 0;
+
+    constructor(engineMediator: EngineMediator, character: Character) {
         this.engineMediator = engineMediator;
+        this.character = character;
 
-        this.engineMediator.registerHandler('Ground::Load', (data: any) => {
-            this.map = data.map;
-            this.mapImage = new Image();
-            this.mapImage.src = data.map.ResourceFile;
+        this.engineMediator.registerHandler('Ground::Load', (data: IMap) => {
+            this.widthInPixels = data.WidthInPixels;
+            this.heightInPixels = data.HeightInPixels;
 
-            this.character = data.character as ICharacter;
+            this.image = new Image();
+            this.image.src = data.ResourceFile;
+
             const { x,y } = this.calculatedMapPosition();
 
             this.engineMediator.publish({
@@ -29,17 +34,16 @@ export class Ground {
                 }
             });
  
-            data.character.AnimatedMapPositionX.reset(x);
-            data.character.AnimatedMapPositionY.reset(y);
+            this.character.animatedMapPositionX.reset(x);
+            this.character.animatedMapPositionY.reset(y);
         });
     }
 
     private calculatedMapPosition() {
-        const character = this.character as ICharacter;
-        const map = this.map as IMap;
+        const character = this.character;
         
-        let marginX = (window.innerWidth - map.WidthInPixels) / 2;
-        let marginY = (window.innerHeight - map.HeightInPixels) / 2;
+        let marginX = (window.innerWidth - this.widthInPixels) / 2;
+        let marginY = (window.innerHeight - this.heightInPixels) / 2;
 
         if (marginX < 0) {
             marginX = 0;
@@ -49,32 +53,35 @@ export class Ground {
             marginY = 0;
         }
 
-        let calculatedX = (window.innerWidth / 2) - (character.PositionX * 32);
-        let calculatedY = (window.innerHeight / 2) - (character.PositionY * 32);
+        let calculatedX = (window.innerWidth / 2) - (character.positionX * 32);
+        let calculatedY = (window.innerHeight / 2) - (character.positionY * 32);
 
         const lockedLeft = calculatedX >= 0;
-        character.CameraLock.Left = lockedLeft;
+        character.cameraLock.left = lockedLeft;
         if (lockedLeft) {
             calculatedX = marginX;
         }
 
-        const lockedRight = calculatedX <= -map.WidthInPixels + window.innerWidth - marginX;
-        character.CameraLock.Right = lockedRight;
+        const lockedRight = calculatedX <= -this.widthInPixels + window.innerWidth - marginX;
+        character.cameraLock.right = lockedRight;
         if (lockedRight) {
-            calculatedX = -map.WidthInPixels + window.innerWidth - marginX;
+            calculatedX = -this.widthInPixels + window.innerWidth - marginX;
         }
 
         const lockedTop = calculatedY >= marginY;
-        character.CameraLock.Top = lockedTop;
+        character.cameraLock.top = lockedTop;
         if (lockedTop) {
             calculatedY = marginY;
         }
 
-        const lockedBottom = calculatedY <= -map.HeightInPixels + window.innerHeight - marginY;
-        character.CameraLock.Bottom = lockedBottom;
+        const lockedBottom = calculatedY <= -this.heightInPixels + window.innerHeight - marginY;
+        character.cameraLock.bottom = lockedBottom;
         if (lockedBottom) {
-            calculatedY = -map.HeightInPixels + window.innerHeight - marginY;
+            calculatedY = -this.heightInPixels + window.innerHeight - marginY;
         }
+
+        this.character.mapPositionX = Math.abs(Math.round(calculatedX / 32));
+        this.character.mapPositionY = Math.abs(Math.round(calculatedY / 32));
 
         return { 
             x: calculatedX, 
@@ -83,20 +90,20 @@ export class Ground {
     }
 
     public isLoaded() : boolean {
-        return typeof(this.map) !== typeof(undefined);
+        return typeof(this.image) !== typeof(undefined);
     }
 
     public getGroundRenderObject() : IMapObject {
-        const character = this.character as ICharacter;
+        const character = this.character;
         var { x, y } = this.calculatedMapPosition();
         
-        character.AnimatedMapPositionX.change(x);
-        character.AnimatedMapPositionY.change(y);
+        character.animatedMapPositionX.change(x);
+        character.animatedMapPositionY.change(y);
 
         return {
-            image: this.mapImage as HTMLImageElement,
-            dx: character.AnimatedMapPositionX,
-            dy: character.AnimatedMapPositionY
+            image: this.image as HTMLImageElement,
+            dx: character.animatedMapPositionX,
+            dy: character.animatedMapPositionY
         };
     }
 }

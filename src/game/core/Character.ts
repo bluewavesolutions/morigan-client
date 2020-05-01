@@ -7,8 +7,28 @@ import { AnimatedValue } from "./AnimatedValue";
 export class Character {
     private engineMediator: EngineMediator;
     private engineStore: EngineStore;
-    private character: ICharacter | undefined;
-    private characterImage: HTMLImageElement | undefined;
+
+    private id: number = 0;
+
+    private image: HTMLImageElement | undefined;
+    public cameraLock = {
+        left: false,
+        right: false,
+        top: false,
+        bottom: false
+    };
+
+    public animatedMapPositionX = new AnimatedValue(0);
+    public animatedMapPositionY = new AnimatedValue(0);
+
+    private animatedPositionX = new AnimatedValue(0);
+    private animatedPositionY = new AnimatedValue(0);
+
+    public positionX: number = 0;
+    public positionY: number = 0;
+
+    public mapPositionX: number = 0;
+    public mapPositionY: number = 0;
 
     private stepX : number = 0;
     private stepY: number = 0;
@@ -19,24 +39,20 @@ export class Character {
         this.engineStore = engineStore;
 
         this.engineMediator.registerHandler('Character::Load', (character: ICharacter) => {
-            this.character = character;
-            this.character.CameraLock = {
-                Left: false,
-                Right: false,
-                Top: false,
-                Bottom: false
-            };
+            this.id = character.Id;
+            this.positionX = character.PositionX;
+            this.positionY = character.PositionY;
 
             const { x, y } = this.calculatedCharacterPosition();
             
-            this.character.AnimatedMapPositionX = new AnimatedValue(x);
-            this.character.AnimatedMapPositionY = new AnimatedValue(y);
+            this.animatedMapPositionX.reset(x);
+            this.animatedMapPositionY.reset(y);
 
-            this.character.AnimatedPositionX = new AnimatedValue(x);
-            this.character.AnimatedPositionY = new AnimatedValue(y);
+            this.animatedPositionX.reset(x);
+            this.animatedPositionY.reset(y);
 
-            this.characterImage = new Image();
-            this.characterImage.src = character.Outfit;
+            this.image = new Image();
+            this.image.src = character.Outfit;
 
             this.engineMediator.publish({
                 type: 'Character::Loaded',
@@ -45,49 +61,47 @@ export class Character {
         });
 
         this.engineMediator.registerHandler('Ground::Loaded', (data: any) => {
-            const character = this.character as ICharacter;
-            character.MapPositionX = data.x;
-            character.MapPositionY = data.y;
+            this.mapPositionX = data.x;
+            this.mapPositionY = data.y;
 
             const { x, y } = this.calculatedCharacterPosition();
             
-            character.AnimatedMapPositionX.reset(x);
-            character.AnimatedMapPositionY.reset(y);
+            this.animatedMapPositionX.reset(x);
+            this.animatedMapPositionY.reset(y);
 
-            character.AnimatedPositionX.reset(x);
-            character.AnimatedPositionY.reset(y);
+            this.animatedPositionX.reset(x);
+            this.animatedPositionY.reset(y);
         });
 
         this.engineMediator.registerHandler('Character::ChangedDirection', (data: string) => {
-            const character = this.character as ICharacter;
-            const mapPositionXAlreadyAnimated = character.AnimatedMapPositionX.isAlreadyAnimated();
-            const mapPositionYAlreadyAnimated = character.AnimatedMapPositionY.isAlreadyAnimated();
-            const characterPositionXAlreadtAnimated = character.AnimatedPositionX.isAlreadyAnimated();
-            const characterPositionYAlreadtAnimated = character.AnimatedPositionY.isAlreadyAnimated();
+            const mapPositionXAlreadyAnimated = this.animatedMapPositionX.isAlreadyAnimated();
+            const mapPositionYAlreadyAnimated = this.animatedMapPositionY.isAlreadyAnimated();
+            const characterPositionXAlreadtAnimated = this.animatedPositionX.isAlreadyAnimated();
+            const characterPositionYAlreadtAnimated = this.animatedPositionY.isAlreadyAnimated();
             
             if (data === 'up') {
                 this.move(48 * 3);
 
                 if (mapPositionYAlreadyAnimated && characterPositionYAlreadtAnimated) {
-                    character.PositionY--;
+                    this.positionY--;
                 }
             } else if (data === 'down') {
                 this.move(0);
                 
                 if (mapPositionYAlreadyAnimated && characterPositionYAlreadtAnimated) {
-                    character.PositionY++;
+                    this.positionY++;
                 }
             } else if (data === 'left') {
                 this.move(48);
 
                 if (mapPositionXAlreadyAnimated && characterPositionXAlreadtAnimated) {
-                    character.PositionX--;
+                    this.positionX--;
                 }
             } else if(data === 'right') {
                 this.move(48 * 2);
                     
                 if (mapPositionXAlreadyAnimated && characterPositionXAlreadtAnimated) {
-                    character.PositionX++;
+                    this.positionX++;
                 }
             } else {
                 if (this.lastDirection === 'up') {
@@ -116,8 +130,8 @@ export class Character {
                     Type: 'MOVE',
                     Data: {
                         SessionToken: this.engineStore.session,
-                        PositionX: this.character?.PositionX,
-                        PositionY: this.character?.PositionY
+                        PositionX: this.positionX,
+                        PositionY: this.positionY
                     }
                 }
             })
@@ -133,23 +147,22 @@ export class Character {
     }
 
     private calculatedCharacterPosition() {
-        const character = this.character as ICharacter;
-        var calculatedX = character.PositionX * 32;
-        var calculatedY = character.PositionY * 32;
+        var calculatedX = this.positionX * 32;
+        var calculatedY = this.positionY * 32;
 
-        if (character.CameraLock.Right) {
-            calculatedX = (character.PositionX * 32) - (character.MapPositionX * 32);
+        if (this.cameraLock.right) {
+            calculatedX = (this.positionX * 32) - (this.mapPositionX * 32);
         }
 
-        if (character.CameraLock.Bottom) {
-            calculatedY = (character.PositionY * 32) - (character.MapPositionY * 32);
+        if (this.cameraLock.bottom) {
+            calculatedY = (this.positionY * 32) - (this.mapPositionY * 32);
         }
 
-        if (character.CameraLock.Left == false && character.CameraLock.Right == false) {
+        if (this.cameraLock.left == false && this.cameraLock.right == false) {
             calculatedX = (window.innerWidth / 2);
         }
 
-        if (character.CameraLock.Top == false && character.CameraLock.Bottom == false) {
+        if (this.cameraLock.top == false && this.cameraLock.bottom == false) {
             calculatedY = (window.innerHeight / 2);
         }
 
@@ -160,29 +173,27 @@ export class Character {
     }
 
     public isLoaded() : boolean {
-        return typeof(this.character) !== typeof(undefined);
+        return typeof(this.image) !== typeof(undefined);
     }
 
     public getCharacterRenderObject() : IRenderObject {
-        const character = this.character as ICharacter;
-        const characterImage = this.characterImage as HTMLImageElement;
         const characterWidth = 32;
         const characterHeight = 48;
 
         const { x, y } = this.calculatedCharacterPosition();
 
-        character.AnimatedPositionX.change(x);
-        character.AnimatedPositionY.change(y);
+        this.animatedPositionX.change(x);
+        this.animatedPositionY.change(y);
 
         return {
-            id: character.Id,
-            image: characterImage,
+            id: this.id,
+            image: this.image,
             sx: this.stepX,
             sy: this.stepY,
             sw: characterWidth,
             sh: characterHeight,
-            dx: character.AnimatedPositionX,
-            dy: character.AnimatedPositionY,
+            dx: this.animatedPositionX,
+            dy: this.animatedPositionY,
             dw: characterWidth,
             dh: characterHeight
         } as IRenderObject;
