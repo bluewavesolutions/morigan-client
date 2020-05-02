@@ -78,16 +78,18 @@ export class Character {
             const mapPositionYAlreadyAnimated = this.animatedMapPositionY.isAlreadyAnimated();
             const characterPositionXAlreadtAnimated = this.animatedPositionX.isAlreadyAnimated();
             const characterPositionYAlreadtAnimated = this.animatedPositionY.isAlreadyAnimated();
-            
-            this.move(direction);
 
             if (direction === 'up' && mapPositionYAlreadyAnimated && characterPositionYAlreadtAnimated) {
+                this.move(direction);
                 this.positionY--;
             } else if (direction === 'down' && mapPositionYAlreadyAnimated && characterPositionYAlreadtAnimated) {
+                this.move(direction);
                 this.positionY++;
             } else if (direction === 'left' && mapPositionXAlreadyAnimated && characterPositionXAlreadtAnimated) {
+                this.move(direction);
                 this.positionX--;
             } else if(direction === 'right' && mapPositionXAlreadyAnimated && characterPositionXAlreadtAnimated) {
+                this.move(direction);
                 this.positionX++;
             } else {
                 if (this.lastDirection === 'up') {
@@ -110,21 +112,25 @@ export class Character {
                 }
             }
 
-            this.engineMediator.publish({
-                type: 'Server::SendMessage',
-                data: {
-                    Type: 'MOVE',
-                    Data: {
-                        SessionToken: this.engineStore.session,
-                        PositionX: this.positionX,
-                        PositionY: this.positionY
-                    }
-                }
-            })
+            // this.engineMediator.publish({
+            //     type: 'Server::SendMessage',
+            //     data: {
+            //         Type: 'MOVE',
+            //         Data: {
+            //             SessionToken: this.engineStore.session,
+            //             PositionX: this.positionX,
+            //             PositionY: this.positionY
+            //         }
+            //     }
+            // })
         });
     }
 
     private move(direction: string) {
+        if(direction === null) { 
+            return; 
+        }
+
         switch (direction) {
             case 'up':
                 this.stepY = 48 * 3;

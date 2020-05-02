@@ -40,8 +40,8 @@ export class Ground {
     private calculatedMapPosition() {
         const character = this.character;
         
-        let marginX = (window.innerWidth - this.widthInPixels) / 2;
-        let marginY = (window.innerHeight - this.heightInPixels) / 2;
+        let marginX = Math.round((window.innerWidth - this.widthInPixels) / 2);
+        let marginY = Math.round((window.innerHeight - this.heightInPixels) / 2);
 
         if (marginX < 0) {
             marginX = 0;
@@ -78,8 +78,8 @@ export class Ground {
             calculatedY = -this.heightInPixels + window.innerHeight - marginY;
         }
 
-        this.character.mapPositionX = Math.abs(Math.round(calculatedX / 32));
-        this.character.mapPositionY = Math.abs(Math.round(calculatedY / 32));
+        this.character.mapPositionX = Math.abs(Math.fround(calculatedX / 32));
+        this.character.mapPositionY = Math.abs(Math.fround(calculatedY / 32));
 
         return { 
             x: calculatedX, 
