@@ -49,22 +49,7 @@ export class Character {
         });
 
         this.engineMediator.registerHandler('Character::ChangedDirection', (direction: string) => {
-            if (direction === 'up') {
-                this.positionY--;
-            } 
-            if (direction === 'down') {
-                this.positionY++;
-            }
-            if (direction === 'left') {
-                this.positionX--;
-            }
-            if (direction === 'right') {
-                this.positionX++;
-            }
-
-            this.animatedPositionX.change((this.camera.positionX * 32) + (this.positionX * 32));
-            this.animatedPositionY.change((this.camera.positionY * 32) + (this.positionY * 32));
-            this.move(direction);
+            this.direction(direction);
 
             // this.engineMediator.publish({
             //     type: 'Server::SendMessage',
@@ -85,10 +70,26 @@ export class Character {
         });
     }
 
-    private move(direction: string) {
+    public move(direction: string) {
         if(direction === null) { 
             return; 
         }
+
+        if (direction === 'up') {
+            this.positionY--;
+        } 
+        if (direction === 'down') {
+            this.positionY++;
+        }
+        if (direction === 'left') {
+            this.positionX--;
+        }
+        if (direction === 'right') {
+            this.positionX++;
+        }
+
+        this.animatedPositionX.change((this.camera.positionX * 32) + (this.positionX * 32));
+        this.animatedPositionY.change((this.camera.positionY * 32) + (this.positionY * 32));
 
         switch (direction) {
             case 'up':
@@ -111,6 +112,27 @@ export class Character {
         if(this.stepX >= 32*4) {
             this.stepX = 0;
         }
+    }
+
+    public direction(direction: string) {
+        switch (direction) {
+            case 'up':
+                this.stepY = 48 * 3;
+                break;
+            case 'left':
+                this.stepY = 48;
+                break;
+            case 'down':
+                this.stepY = 0;
+                break;
+            case 'right':
+                this.stepY = 48 * 2;
+                break;
+            default:
+                break;
+        }
+
+        this.stepX = 0;
     }
 
     public isLoaded() : boolean {

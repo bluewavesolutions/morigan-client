@@ -27,12 +27,15 @@ export class KeyboardListener {
         }
     
         const keyDirection = DIRECTION_KEY_CODES[code];
+
+        if(keyDirection != this.currentDirection) {
+            this.engineMediator.publish({
+                type: 'Character::ChangedDirection',
+                data: keyDirection
+            });
+        }
+
         this.currentDirection = keyDirection;
-    
-        this.engineMediator.publish({
-            type: 'Character::ChangedDirection',
-            data: keyDirection
-        });
     }
     
     private handleKeyUpEvent = (event: KeyboardEvent) => {

@@ -38,15 +38,15 @@ export class Ground {
             this.camera.attachGround(this);
         });
 
-        this.engineMediator.registerHandler('Character::ChangedDirection', (direction: string) => {
-            this.animatedPositionX.change((this.camera.positionX * 32) + (this.positionX * 32));
-            this.animatedPositionY.change((this.camera.positionY * 32) + (this.positionY * 32));
-        });
-
         this.engineMediator.registerHandler('Camera::Loaded', (data: any) => {
             this.animatedPositionX.change((data.x * 32) + (this.positionX * 32));
             this.animatedPositionY.change((data.y * 32) + (this.positionY * 32));
         });
+    }
+
+    public move(direction: string) {
+        this.animatedPositionX.change((this.camera.positionX * 32) + (this.positionX * 32));
+        this.animatedPositionY.change((this.camera.positionY * 32) + (this.positionY * 32));
     }
 
     public isLoaded() : boolean {

@@ -14,34 +14,34 @@ export class Camera {
     private character: Character;
     private ground: Ground;
 
-    constructor(
-        private engineMediator: EngineMediator
-    ) {
-        this.engineMediator.registerHandler('Character::ChangedDirection', (direction: string) => {
-            let lock = {
-                left: this.positionX >= 0
-                || this.character.positionX < (window.innerWidth / 2 - 32) / 32,
-                right: this.maxX - this.positionX > 0
-                    || this.character.positionY < Math.abs((this.maxX - ((window.innerWidth / 2 + 32) / 32))),
-                up: this.positionY >= 0
-                    || this.character.positionY > Math.abs((this.maxY - ((window.innerHeight / 2 + 48) / 32))),
-                down: this.maxY - this.positionY > 0 
-                    || this.character.positionY < (window.innerHeight / 2 - 48) / 32
-            };
+    public move(direction: string) {
+        if (direction === null) {
+            return;
+        }
 
-            if (direction === 'up' && lock.up === false) {
-                this.positionY++;
-            } 
-            if (direction === 'down' && lock.down === false) {
-                this.positionY--;
-            }
-            if (direction === 'left' && lock.left === false) {
-                this.positionX++;
-            }
-            if (direction === 'right' && lock.right === false) {
-                this.positionX--;
-            }
-        });
+        let lock = {
+            left: this.positionX >= 0
+            || this.character.positionX < (window.innerWidth / 2 - 32) / 32,
+            right: this.maxX - this.positionX > 0
+                || this.character.positionY < Math.abs((this.maxX - ((window.innerWidth / 2 + 32) / 32))),
+            up: this.positionY >= 0
+                || this.character.positionY > Math.abs((this.maxY - ((window.innerHeight / 2 + 48) / 32))),
+            down: this.maxY - this.positionY > 0 
+                || this.character.positionY < (window.innerHeight / 2 - 48) / 32
+        };
+
+        if (direction === 'up' && lock.up === false) {
+            this.positionY++;
+        } 
+        if (direction === 'down' && lock.down === false) {
+            this.positionY--;
+        }
+        if (direction === 'left' && lock.left === false) {
+            this.positionX++;
+        }
+        if (direction === 'right' && lock.right === false) {
+            this.positionX--;
+        }
     }
 
     public attachCharacter(character: Character) {

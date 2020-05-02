@@ -2,13 +2,19 @@ import { Ground } from "./Ground";
 import { Character } from "./Character";
 import { OtherCharactersManager } from "./managers/OtherCharactersManager";
 import { injectable } from "tsyringe";
+import { Camera } from "./Camera";
+import { EngineMediator } from "../utils/EngineMediator";
 
 @injectable()
 export class Renderer {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
+    private direction: string = null;
+    private startTime: number = null;
 
     constructor(
+        private engineMediator: EngineMediator,
+        private camera: Camera,
         private character: Character,
         private ground: Ground,
         private otherCharactersManager: OtherCharactersManager
@@ -26,6 +32,10 @@ export class Renderer {
             this.canvas.width = window.innerWidth - 5;
             this.canvas.height = window.innerHeight - 5;
         }, false);
+
+        this.engineMediator.registerHandler('Character::ChangedDirection', (direction: string) => {
+            this.direction = direction;
+        });
     }
 
     public start() {
@@ -78,7 +88,26 @@ export class Renderer {
         }
 
         requestAnimationFrame((time: number) => {
+            this.update(time / 200);
             this.render(time);
         });
+    }
+
+    private update(time: number) {
+        if (this.startTime === null) {
+            this.startTime = time;
+        }
+
+        const deltaTime = time - this.startTime;
+        if (deltaTime < 1) {
+            return;
+        }
+
+        this.camera.move(this.direction);
+        this.character.move(this.direction);
+        this.ground.move(this.direction);
+        this.otherCharactersManager.move(this.direction);
+
+        this.startTime = null;
     }
 }

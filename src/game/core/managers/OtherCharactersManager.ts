@@ -21,7 +21,6 @@ export class OtherCharactersManager {
             }
 
             this.otherCharacters.push(new OtherCharacter(this.camera,
-                this.engineMediator,
                 data.Id, 
                 data.Nick, 
                 data.Outfit,
@@ -34,6 +33,10 @@ export class OtherCharactersManager {
             character.positionX = data.PositionX;
             character.positionY = data.PositionY;     
         });
+    }
+
+    public move(direction: string) {
+        this.otherCharacters.map(e => e.move(direction));
     }
 
     public getCharacterRenderObjects() : IRenderObject[] {

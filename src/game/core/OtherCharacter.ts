@@ -5,7 +5,6 @@ import { EngineMediator } from "../utils/EngineMediator";
 
 export class OtherCharacter {
     private camera: Camera;
-    private engineMediator: EngineMediator;
     public id: number;
     public nick: string;
     public outfit: string;
@@ -16,7 +15,6 @@ export class OtherCharacter {
     public animatedY: AnimatedValue;
 
     constructor(camera: Camera, 
-        engineMediator: EngineMediator, 
         id: number, 
         nick: string, 
         outfit: string, 
@@ -24,7 +22,6 @@ export class OtherCharacter {
         positionY: number
     ) {
         this.camera = camera;
-        this.engineMediator = engineMediator;
         this.id = id;
         this.nick = nick;
         this.outfit = outfit;
@@ -36,11 +33,11 @@ export class OtherCharacter {
 
         this.animatedX = new AnimatedValue((this.camera.positionX * 32) + (this.positionX * 32));
         this.animatedY = new AnimatedValue((this.camera.positionY * 32) + (this.positionY * 32));
+    }
 
-        this.engineMediator.registerHandler('Character::ChangedDirection', (direction: string) => {
-            this.animatedX.change((this.camera.positionX * 32) + (this.positionX * 32));
-            this.animatedY.change((this.camera.positionY * 32) + (this.positionY * 32));
-        });
+    public move(direction: string) {
+        this.animatedX.change((this.camera.positionX * 32) + (this.positionX * 32));
+        this.animatedY.change((this.camera.positionY * 32) + (this.positionY * 32));
     }
 
     public getRenderereObject() : IRenderObject {
