@@ -2,7 +2,7 @@ export class AnimatedValue {
     private value: number;
     private newValue: number;
     private isAnimated: boolean = true;
-    private timeForDelta: number = 0;
+    private startTime: number = null;
 
     constructor(value: number) {
         this.value = value;
@@ -10,12 +10,18 @@ export class AnimatedValue {
     }
 
     public reset(to: number) {
-        this.value = to;
-        this.newValue = to;
+        if (this.value != to || this.newValue != to) {
+            this.value = to;
+            this.newValue = to;
+            this.startTime = null;
+        }
     }
 
     public change(to: number) {
-        this.newValue = to;
+        if(this.newValue != to) {
+            this.newValue = to;
+            this.startTime = null;
+        }
     }
 
     public currentValue() : number {
@@ -27,25 +33,30 @@ export class AnimatedValue {
     }
 
     public updateOnRedner(time: number) {
-        var deltaTime = Math.abs(time - this.timeForDelta) / 333.0
-        this.timeForDelta = time;
-
-        var distance = this.newValue - this.value;
-
-        const speed = 50;
-
-        if (Math.abs(distance) <= speed / 10) {
+        if (this.value === this.newValue) {
             this.isAnimated = true;
-            this.value = this.newValue;
+
             return;
         }
-    
-        if(distance < 0) {
-            this.value -= Math.round(speed * deltaTime);
-        } else {
-            this.value += Math.round(speed * deltaTime);
+
+        if (this.startTime === null) {
+            this.startTime = time;
+            this.isAnimated = false;
         }
 
-        this.isAnimated = false;
+        var deltaTime = (time - this.startTime) / 1000.0;
+
+        var current = this.value + (((this.newValue - this.value) * deltaTime));
+        this.value = current;
+
+        if(Math.abs(this.value - this.newValue) <= 0) {
+            this.isAnimated = true;
+            this.value = this.newValue;
+        }
+
+        if (deltaTime >= 1) {
+            this.isAnimated = true;
+            this.value = this.newValue;
+        }
     }
 }

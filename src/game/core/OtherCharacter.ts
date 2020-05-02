@@ -1,9 +1,11 @@
 import { AnimatedValue } from "../utils/AnimatedValue";
 import { IRenderObject } from "./interfaces/IRenderObject";
-import { Character } from "./Character";
+import { Camera } from "./Camera";
+import { EngineMediator } from "../utils/EngineMediator";
 
 export class OtherCharacter {
-    private character: Character;
+    private camera: Camera;
+    private engineMediator: EngineMediator;
     public id: number;
     public nick: string;
     public outfit: string;
@@ -13,8 +15,16 @@ export class OtherCharacter {
     public animatedX: AnimatedValue;
     public animatedY: AnimatedValue;
 
-    constructor(character: Character, id: number, nick: string, outfit: string, positionX: number, positionY: number) {
-        this.character = character;
+    constructor(camera: Camera, 
+        engineMediator: EngineMediator, 
+        id: number, 
+        nick: string, 
+        outfit: string, 
+        positionX: number, 
+        positionY: number
+    ) {
+        this.camera = camera;
+        this.engineMediator = engineMediator;
         this.id = id;
         this.nick = nick;
         this.outfit = outfit;
@@ -24,16 +34,18 @@ export class OtherCharacter {
         this.image = new Image();
         this.image.src = this.outfit;
 
-        this.animatedX = new AnimatedValue((this.positionX - this.character.mapPositionX) * 32);
-        this.animatedY = new AnimatedValue((this.positionY - this.character.mapPositionY) * 32);
+        this.animatedX = new AnimatedValue((this.camera.positionX * 32) + (this.positionX * 32));
+        this.animatedY = new AnimatedValue((this.camera.positionY * 32) + (this.positionY * 32));
+
+        this.engineMediator.registerHandler('Character::ChangedDirection', (direction: string) => {
+            this.animatedX.change((this.camera.positionX * 32) + (this.positionX * 32));
+            this.animatedY.change((this.camera.positionY * 32) + (this.positionY * 32));
+        });
     }
 
     public getRenderereObject() : IRenderObject {
         const characterWidth = 32;
         const characterHeight = 48;
-
-        this.animatedX.change((this.positionX - this.character.mapPositionX) * 32);
-        this.animatedY.change((this.positionY - this.character.mapPositionY) * 32);
 
         return {
             id: this.id,

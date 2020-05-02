@@ -3,8 +3,8 @@ import { OtherCharacter } from "../OtherCharacter";
 import { IOtherCharacterMovedResponse } from "../../server/interfaces/responses/IOtherCharacterMovedResponse";
 import { IRenderObject } from "../interfaces/IRenderObject";
 import { IOtherCharacterServerModel } from "../../server/interfaces/serverModels/IOtherCharacterServerModel";
-import { Character } from "../Character";
 import { singleton } from "tsyringe";
+import { Camera } from "../Camera";
 
 @singleton()
 export class OtherCharactersManager {
@@ -12,7 +12,7 @@ export class OtherCharactersManager {
 
     constructor(
         private engineMediator: EngineMediator,
-        private character: Character
+        private camera: Camera
     ) {
         this.engineMediator.registerHandler('OtherCharactersManager::Load', (data: IOtherCharacterServerModel) => {
             let findIndex = this.otherCharacters.findIndex(e => e.id == data.Id);
@@ -20,7 +20,8 @@ export class OtherCharactersManager {
                 return;
             }
 
-            this.otherCharacters.push(new OtherCharacter(this.character,
+            this.otherCharacters.push(new OtherCharacter(this.camera,
+                this.engineMediator,
                 data.Id, 
                 data.Nick, 
                 data.Outfit,
