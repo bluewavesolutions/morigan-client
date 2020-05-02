@@ -1,5 +1,5 @@
 import { IServerEventInterpreter } from "../interfaces/ISeverEventInterpreter";
-import { IGameLoadedResponse } from "../../servcer/interfaces/responses/IGameLoadedResponse";
+import { IGameLoadedResponse } from "../../server/interfaces/responses/IGameLoadedResponse";
 import { EngineMediator } from "../../utils/EngineMediator";
 import { EngineStore } from "../../store/EngineStore";
 

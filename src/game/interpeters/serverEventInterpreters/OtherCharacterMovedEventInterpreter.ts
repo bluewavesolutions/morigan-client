@@ -1,5 +1,5 @@
 import { IServerEventInterpreter } from "../interfaces/ISeverEventInterpreter";
-import { IOtherCharacterMovedResponse } from "../../servcer/interfaces/responses/IOtherCharacterMovedResponse";
+import { IOtherCharacterMovedResponse } from "../../server/interfaces/responses/IOtherCharacterMovedResponse";
 import { EngineMediator } from "../../utils/EngineMediator";
 
 export class OtherCharacterMovedEventInterpreter implements IServerEventInterpreter<IOtherCharacterMovedResponse> {

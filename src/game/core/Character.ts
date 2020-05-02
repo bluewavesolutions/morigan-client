@@ -1,13 +1,12 @@
 import { EngineMediator } from "../utils/EngineMediator";
 import { IRenderObject } from "./interfaces/IRenderObject";
 import { EngineStore } from "../store/EngineStore";
-import { ICharacterServerModel } from "../servcer/interfaces/serverModels/ICharacterServerModel";
+import { ICharacterServerModel } from "../server/interfaces/serverModels/ICharacterServerModel";
 import { AnimatedValue } from "../utils/AnimatedValue";
+import { singleton } from "tsyringe";
 
+@singleton()
 export class Character {
-    private engineMediator: EngineMediator;
-    private engineStore: EngineStore;
-
     private id: number = 0;
 
     private image: HTMLImageElement | undefined;
@@ -34,10 +33,10 @@ export class Character {
     private stepY: number = 0;
     private lastDirection: string = '';
 
-    constructor(engineMediator: EngineMediator, engineStore: EngineStore) {
-        this.engineMediator = engineMediator;
-        this.engineStore = engineStore;
-
+    constructor(
+        private engineMediator: EngineMediator,
+        private engineStore: EngineStore
+    ) {
         this.engineMediator.registerHandler('Character::Load', (characterServerModel: ICharacterServerModel) => {
             this.id = characterServerModel.Id;
             this.positionX = characterServerModel.PositionX;

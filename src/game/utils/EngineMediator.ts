@@ -1,5 +1,7 @@
 import { IGameEvent } from "../core/interfaces/IGameEvent";
+import { singleton } from "tsyringe";
 
+@singleton()
 export class EngineMediator {
     private handlers: Map<string, any[]> = new Map();
 

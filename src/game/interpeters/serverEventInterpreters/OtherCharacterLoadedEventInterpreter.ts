@@ -1,4 +1,4 @@
-import { IOtherCharacterLoadedResponse } from "../../servcer/interfaces/responses/IOtherCharacterLoadedResponse";
+import { IOtherCharacterLoadedResponse } from "../../server/interfaces/responses/IOtherCharacterLoadedResponse";
 import { IServerEventInterpreter } from "../interfaces/ISeverEventInterpreter";
 import { EngineMediator } from "../../utils/EngineMediator";
 

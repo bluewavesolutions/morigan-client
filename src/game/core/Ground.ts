@@ -1,20 +1,20 @@
 import { EngineMediator } from "../utils/EngineMediator";
 import { IMapObject } from "./interfaces/IMapObject";
-import { IMapServerModel } from "../servcer/interfaces/serverModels/IMapServerModel";
+import { IMapServerModel } from "../server/interfaces/serverModels/IMapServerModel";
 import { Character } from "./Character";
+import { singleton } from "tsyringe";
 
+@singleton()
 export class Ground {
-    private engineMediator: EngineMediator;
-    private character: Character;
     private image: HTMLImageElement | undefined;
 
     private widthInPixels: number = 0;
     private heightInPixels: number = 0;
 
-    constructor(engineMediator: EngineMediator, character: Character) {
-        this.engineMediator = engineMediator;
-        this.character = character;
-
+    constructor(
+        private engineMediator: EngineMediator,
+        private character: Character
+    ) {
         this.engineMediator.registerHandler('Ground::Load', (mapServerModel: IMapServerModel) => {
             this.widthInPixels = mapServerModel.WidthInPixels;
             this.heightInPixels = mapServerModel.HeightInPixels;

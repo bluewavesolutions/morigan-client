@@ -1,20 +1,19 @@
 import { EngineMediator } from "../../utils/EngineMediator";
 import { OtherCharacter } from "../OtherCharacter";
-import { IOtherCharacterMovedResponse } from "../../servcer/interfaces/responses/IOtherCharacterMovedResponse";
+import { IOtherCharacterMovedResponse } from "../../server/interfaces/responses/IOtherCharacterMovedResponse";
 import { IRenderObject } from "../interfaces/IRenderObject";
-import { IOtherCharacterServerModel } from "../../servcer/interfaces/serverModels/IOtherCharacterServerModel";
+import { IOtherCharacterServerModel } from "../../server/interfaces/serverModels/IOtherCharacterServerModel";
 import { Character } from "../Character";
+import { singleton } from "tsyringe";
 
+@singleton()
 export class OtherCharactersManager {
-    private engineMediator: EngineMediator;
-    private character: Character;
-
     private otherCharacters: OtherCharacter[] = [];
 
-    constructor(engineMediator: EngineMediator, character: Character) {
-        this.engineMediator = engineMediator;
-        this.character = character;
-
+    constructor(
+        private engineMediator: EngineMediator,
+        private character: Character
+    ) {
         this.engineMediator.registerHandler('OtherCharactersManager::Load', (data: IOtherCharacterServerModel) => {
             let findIndex = this.otherCharacters.findIndex(e => e.id == data.Id);
             if(findIndex >= 0) {

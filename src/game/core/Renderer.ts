@@ -1,36 +1,30 @@
-import { EngineMediator } from "../utils/EngineMediator";
-import { IRenderObject } from "./interfaces/IRenderObject";
 import { Ground } from "./Ground";
 import { Character } from "./Character";
 import { OtherCharactersManager } from "./managers/OtherCharactersManager";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class Renderer {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
-    private character: Character;
-    private ground: Ground;
-    private otherCharactersManager: OtherCharactersManager;
 
-    constructor(canvas: HTMLCanvasElement, 
-        engineMediator: EngineMediator, 
-        ground: Ground, 
-        character: Character,
-        otherCharactersManager: OtherCharactersManager) 
+    constructor(
+        private character: Character,
+        private ground: Ground,
+        private otherCharactersManager: OtherCharactersManager
+    ) 
     {
-        this.canvas = canvas;
-        this.context = canvas.getContext('2d') as CanvasRenderingContext2D;
-        this.character = character;
-        this.ground = ground;
-        this.otherCharactersManager = otherCharactersManager;
+        this.canvas = document.getElementById('game') as HTMLCanvasElement;
+        this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
         window.addEventListener('load', () => {
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
+            this.canvas.width = window.innerWidth - 5;
+            this.canvas.height = window.innerHeight - 5;
         }, false); 
 
         window.addEventListener('resize', () => {
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
+            this.canvas.width = window.innerWidth - 5;
+            this.canvas.height = window.innerHeight - 5;
         }, false);
     }
 

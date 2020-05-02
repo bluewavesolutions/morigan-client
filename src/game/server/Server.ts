@@ -1,16 +1,17 @@
 import { EngineMediator } from "../utils/EngineMediator";
+import { EngineStore } from "../store/EngineStore";
 import { IServerCommunicationFrame } from "./interfaces/IServerCommunicationFrame";
 import { ILoadGameRequest } from './interfaces/requests/ILoadGameRequest';
-import { EngineStore } from "../store/EngineStore";
+import { singleton } from "tsyringe";
 
+@singleton()
 export class Server {
     private webSocket: WebSocket | undefined;
-    private engineMediator: EngineMediator;
-    private engineStore: EngineStore;
 
-    constructor(engineMediator: EngineMediator, engineStore: EngineStore) {
-        this.engineMediator = engineMediator;
-        this.engineStore = engineStore;
+    constructor(
+        private engineMediator: EngineMediator,
+        private engineStore: EngineStore
+    ) {
     }
 
     public connect() {

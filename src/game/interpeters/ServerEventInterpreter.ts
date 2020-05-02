@@ -1,20 +1,19 @@
 import { EngineMediator } from "../utils/EngineMediator";
-import { IServerCommunicationFrame } from "../servcer/interfaces/IServerCommunicationFrame";
+import { EngineStore } from "../store/EngineStore";
+import { IServerCommunicationFrame } from "../server/interfaces/IServerCommunicationFrame";
 import { IServerEventInterpreter } from "./interfaces/ISeverEventInterpreter";
 import { GameLoadedEventInterpreter } from "./serverEventInterpreters/GameLoadedEventInterpreter";
-import { EngineStore } from "../store/EngineStore";
 import { EngineErrorEventInterpreter } from "./serverEventInterpreters/EngineErrorEventInterpreter";
 import { OtherCharacterLoadedEventInterpreter } from "./serverEventInterpreters/OtherCharacterLoadedEventInterpreter";
 import { OtherCharacterMovedEventInterpreter } from "./serverEventInterpreters/OtherCharacterMovedEventInterpreter";
+import { singleton } from "tsyringe";
 
+@singleton()
 export class ServerEventInterpreter {
-    engineMediator: EngineMediator;
-    engineStore: EngineStore;
-
-    constructor(engineMediator: EngineMediator, engineStore: EngineStore) {
-        this.engineMediator = engineMediator;
-        this.engineStore = engineStore;
-
+    constructor(
+        private engineMediator: EngineMediator,
+        private engineStore: EngineStore
+    ) {
         this.engineMediator.registerHandler('Server::OnMessage', async (serverCommunicationFrame: any) => {
             await this.execute(JSON.parse(serverCommunicationFrame));
         });

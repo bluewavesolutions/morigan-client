@@ -1,4 +1,5 @@
 import { EngineMediator } from "../utils/EngineMediator";
+import { singleton } from "tsyringe";
 
 export type Direction = 'up' | 'down' | 'left' | 'right' | null;
 
@@ -9,13 +10,11 @@ const DIRECTION_KEY_CODES: { [keyCode: string]: Direction } = {
   'KeyS': 'down', 'ArrowDown': 'down'
 };
 
+@singleton()
 export class KeyboardListener {
     private currentDirection: Direction = null;
-    private engineMediator: EngineMediator;
 
-    constructor(engineMediator: EngineMediator) {
-        this.engineMediator = engineMediator;
-
+    constructor(private engineMediator: EngineMediator) {
         window.addEventListener('keydown', this.handleKeyDownEvent, false);
         window.addEventListener('keyup', this.handleKeyUpEvent, false);
     }
