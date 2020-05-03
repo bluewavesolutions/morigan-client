@@ -126,7 +126,7 @@ export class Camera {
         if (positionX < this.maxX) {
             positionX = this.maxX;
         }
-
+        
         return {
             positionX,
             positionY
@@ -139,8 +139,19 @@ export class Camera {
         const x = (window.innerWidth) / 32;
         const y = (window.innerHeight) / 32;
 
-        this.maxX = -this.ground.width + x;
-        this.maxY = -this.ground.height + y;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        if (window.innerWidth > this.ground.width*32) {
+            offsetX = (window.innerWidth - (this.ground.width*32)) / 2 / 32;
+        }
+
+        if (window.innerHeight > this.ground.height*32) {
+            offsetY = (window.innerHeight - (this.ground.height*32)) / 2 / 32;
+        }
+
+        this.maxX = -this.ground.width + x - offsetX;
+        this.maxY = -this.ground.height + y - offsetY;
     }
 
     public getPosition() {
