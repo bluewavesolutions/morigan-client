@@ -57,18 +57,6 @@ export class Character {
             if (direction === null) {
                 this.direction(this.lastDirection);
             }
-
-            // this.engineMediator.publish({
-            //     type: 'Server::SendMessage',
-            //     data: {
-            //         Type: 'MOVE',
-            //         Data: {
-            //             SessionToken: this.engineStore.session,
-            //             PositionX: this.positionX,
-            //             PositionY: this.positionY
-            //         }
-            //     }
-            // })
         });
 
         this.engineMediator.registerHandler('Camera::Loaded', (data: any) => {
@@ -139,6 +127,18 @@ export class Character {
         this.realX = (positionX) * 32;
         this.realY = (positionY) * 32;
         this.animationLock = false;
+
+        this.engineMediator.publish({
+            type: 'Server::SendMessage',
+            data: {
+                Type: 'MOVE',
+                Data: {
+                    SessionToken: this.engineStore.session,
+                    PositionX: this.positionX,
+                    PositionY: this.positionY
+                }
+            }
+        })
 
         await this.camera.centerToCharacter();
     }
