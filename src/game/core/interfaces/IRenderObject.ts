@@ -1,5 +1,3 @@
-import { AnimatedValue } from "../../utils/AnimatedValue";
-
 export interface IRenderObject {
     id: number,
     image: CanvasImageSource,
@@ -7,8 +5,8 @@ export interface IRenderObject {
     sy: number,
     sw: number,
     sh: number,
-    dx: AnimatedValue,
-    dy: AnimatedValue,
+    dx: number,
+    dy: number,
     dw: number,
     dh: number,
 }

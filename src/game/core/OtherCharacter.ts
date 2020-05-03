@@ -1,7 +1,5 @@
-import { AnimatedValue } from "../utils/AnimatedValue";
 import { IRenderObject } from "./interfaces/IRenderObject";
 import { Camera } from "./Camera";
-import { EngineMediator } from "../utils/EngineMediator";
 
 export class OtherCharacter {
     private camera: Camera;
@@ -11,8 +9,8 @@ export class OtherCharacter {
     public positionX: number;
     public positionY: number;
     public image: HTMLImageElement;
-    public animatedX: AnimatedValue;
-    public animatedY: AnimatedValue;
+    public realX: number;
+    public realY: number;
 
     constructor(camera: Camera, 
         id: number, 
@@ -31,13 +29,13 @@ export class OtherCharacter {
         this.image = new Image();
         this.image.src = this.outfit;
 
-        this.animatedX = new AnimatedValue((this.camera.positionX * 32) + (this.positionX * 32));
-        this.animatedY = new AnimatedValue((this.camera.positionY * 32) + (this.positionY * 32));
+        this.realX = (this.camera.positionX * 32) + (this.positionX * 32);
+        this.realY = (this.camera.positionY * 32) + (this.positionY * 32);
     }
 
     public move(direction: string) {
-        this.animatedX.change((this.camera.positionX * 32) + (this.positionX * 32));
-        this.animatedY.change((this.camera.positionY * 32) + (this.positionY * 32));
+        this.realX = (this.camera.positionX * 32) + (this.positionX * 32);
+        this.realY = (this.camera.positionY * 32) + (this.positionY * 32);
     }
 
     public getRenderereObject() : IRenderObject {
@@ -51,8 +49,8 @@ export class OtherCharacter {
             sy: 0,
             sw: characterWidth,
             sh: characterHeight,
-            dx: this.animatedX,
-            dy: this.animatedY,
+            dx: this.realX,
+            dy: this.realY,
             dw: characterWidth,
             dh: characterHeight
         }

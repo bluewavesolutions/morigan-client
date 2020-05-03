@@ -50,45 +50,37 @@ export class Renderer {
         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
         if(this.ground.isLoaded()) {
             const ground = this.ground.getGroundRenderObject();
-            ground.dx.updateOnRedner(time);
-            ground.dy.updateOnRedner(time);
-
-            context.drawImage(ground.image, ground.dx.currentValue(), ground.dy.currentValue());
+            context.drawImage(ground.image, ground.dx, ground.dy);
         }
 
         for(let renderObject of otherCharactersManager.getCharacterRenderObjects()) {
-            renderObject.dx.updateOnRedner(time);
-            renderObject.dy.updateOnRedner(time);
-
             context.drawImage(renderObject.image, 
                 renderObject.sx, 
                 renderObject.sy,
                 renderObject.sw,
                 renderObject.sh,
-                renderObject.dx.currentValue(),
-                renderObject.dy.currentValue(),
+                renderObject.dx,
+                renderObject.dy,
                 renderObject.dw,
                 renderObject.dh);
         }
 
         if (this.character.isLoaded()) {
             const character = this.character.getCharacterRenderObject();
-            character.dx.updateOnRedner(time);
-            character.dy.updateOnRedner(time);
 
             context.drawImage(character.image, 
                 character.sx, 
                 character.sy,
                 character.sw,
                 character.sh,
-                character.dx.currentValue(),
-                character.dy.currentValue(),
+                character.dx,
+                character.dy,
                 character.dw,
                 character.dh);
         }
 
         requestAnimationFrame((time: number) => {
-            this.update(time / 200);
+            this.update(time / 300);
             this.render(time);
         });
     }

@@ -2,7 +2,6 @@ import { EngineMediator } from "../utils/EngineMediator";
 import { IRenderObject } from "./interfaces/IRenderObject";
 import { EngineStore } from "../store/EngineStore";
 import { ICharacterServerModel } from "../server/interfaces/serverModels/ICharacterServerModel";
-import { AnimatedValue } from "../utils/AnimatedValue";
 import { singleton } from "tsyringe";
 import { Camera } from "./Camera";
 
@@ -18,8 +17,8 @@ export class Character {
         bottom: false
     };
 
-    public animatedPositionX = new AnimatedValue(0);
-    public animatedPositionY = new AnimatedValue(0);
+    public realX = 0;
+    public realY = 0;
 
     public positionX: number = 0;
     public positionY: number = 0;
@@ -39,8 +38,8 @@ export class Character {
             this.positionX = characterServerModel.PositionX;
             this.positionY = characterServerModel.PositionY;
 
-            this.animatedPositionX.reset(this.positionX * 32);
-            this.animatedPositionY.reset(this.positionY * 32);
+            this.realX = this.positionX * 32;
+            this.realY = this.positionY * 32;
 
             this.image = new Image();
             this.image.src = characterServerModel.Outfit;
@@ -65,8 +64,8 @@ export class Character {
         });
 
         this.engineMediator.registerHandler('Camera::Loaded', (data: any) => {
-            this.animatedPositionX.change((data.x * 32) + (this.positionX * 32));
-            this.animatedPositionY.change((data.y * 32) + (this.positionY * 32));
+            this.realX = (data.x * 32) + (this.positionX * 32);
+            this.realY = (data.y * 32) + (this.positionY * 32);
         });
     }
 
@@ -88,8 +87,8 @@ export class Character {
             this.positionX++;
         }
 
-        this.animatedPositionX.change((this.camera.positionX * 32) + (this.positionX * 32));
-        this.animatedPositionY.change((this.camera.positionY * 32) + (this.positionY * 32));
+        this.realX = (this.camera.positionX * 32) + (this.positionX * 32);
+        this.realY = (this.camera.positionY * 32) + (this.positionY * 32);
 
         switch (direction) {
             case 'up':
@@ -150,8 +149,8 @@ export class Character {
             sy: this.stepY,
             sw: characterWidth,
             sh: characterHeight,
-            dx: this.animatedPositionX,
-            dy: this.animatedPositionY,
+            dx: this.realX,
+            dy: this.realY,
             dw: characterWidth,
             dh: characterHeight
         } as IRenderObject;

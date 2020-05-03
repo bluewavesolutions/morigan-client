@@ -2,7 +2,6 @@ import { EngineMediator } from "../utils/EngineMediator";
 import { IMapObject } from "./interfaces/IMapObject";
 import { IMapServerModel } from "../server/interfaces/serverModels/IMapServerModel";
 import { singleton } from "tsyringe";
-import { AnimatedValue } from "../utils/AnimatedValue";
 import { Camera } from "./Camera";
 
 @singleton()
@@ -18,8 +17,8 @@ export class Ground {
     public positionX = 0;
     public positionY = 0;
 
-    public animatedPositionX = new AnimatedValue(0);
-    public animatedPositionY = new AnimatedValue(0);
+    public realX = 0;
+    public realY = 0;
 
     constructor(
         private engineMediator: EngineMediator,
@@ -39,14 +38,14 @@ export class Ground {
         });
 
         this.engineMediator.registerHandler('Camera::Loaded', (data: any) => {
-            this.animatedPositionX.change((data.x * 32) + (this.positionX * 32));
-            this.animatedPositionY.change((data.y * 32) + (this.positionY * 32));
+            this.realX = (data.x * 32) + (this.positionX * 32);
+            this.realY = (data.y * 32) + (this.positionY * 32);
         });
     }
 
     public move(direction: string) {
-        this.animatedPositionX.change((this.camera.positionX * 32) + (this.positionX * 32));
-        this.animatedPositionY.change((this.camera.positionY * 32) + (this.positionY * 32));
+        this.realX = (this.camera.positionX * 32) + (this.positionX * 32);
+        this.realY = (this.camera.positionY * 32) + (this.positionY * 32);
     }
 
     public isLoaded() : boolean {
@@ -56,8 +55,8 @@ export class Ground {
     public getGroundRenderObject() : IMapObject {
         return {
             image: this.image as HTMLImageElement,
-            dx: this.animatedPositionX,
-            dy: this.animatedPositionY
+            dx: this.realX,
+            dy: this.realY
         };
     }
 }
