@@ -9,6 +9,6 @@ if (jwt === null) {
 @singleton()
 export class EngineStore {
     jwt: string = jwt as string;
-    characterId: number = 1;//Number(prompt('character') as string);
+    characterId: number = Number(prompt('character') as string);
     session: string = '';
 }

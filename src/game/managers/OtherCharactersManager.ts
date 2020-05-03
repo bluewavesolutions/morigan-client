@@ -1,4 +1,3 @@
-
 import { OtherCharacter } from "../components/OtherCharacter";
 import { IOtherCharacterMovedResponse } from "../communication/interfaces/responses/IOtherCharacterMovedResponse";
 import { IRenderObject } from "../core/renderer/interfaces/IRenderObject";
@@ -34,17 +33,8 @@ export class OtherCharactersManager {
 
         this.mediator.registerHandler('OtherCharactersManager::Moved', (data: IOtherCharacterMovedResponse) => {
             let character = this.otherCharacters.find((e) => e.id == data.Id) as OtherCharacter;
-            character.positionX = data.PositionX;
-            character.positionY = data.PositionY;     
+            character.move(data.PositionX, data.PositionY); 
         });
-
-        this.mediator.registerHandler('Character::ChangedDirection', async (direction: string) => {
-            await this.move(direction);
-        });
-    }
-
-    public async move(direction: string) {
-        this.otherCharacters.map(async funct => await funct.move(direction));
     }
 
     public getCharacterRenderObjects() : IRenderObject[] {
