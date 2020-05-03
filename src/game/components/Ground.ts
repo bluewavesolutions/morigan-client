@@ -36,6 +36,11 @@ export class Ground {
 
             this.camera.attachGround(this);
             this.camera.centerToCharacter();
+
+            this.mediator.publish({
+                type: 'Ground::Loaded',
+                data: {}
+            });
         });
     }
 

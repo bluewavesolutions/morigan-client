@@ -50,6 +50,11 @@ export class Character {
             this.image.src = characterServerModel.Outfit;
 
             this.camera.attachCharacter(this);
+
+            this.mediator.publish({
+                type: 'Character::Loaded',
+                data: {}
+            });
         });
 
         this.mediator.registerHandler('Character::ChangedDirection', async (direction: Direction) => {
