@@ -3,6 +3,7 @@ import { IMapObject } from "./interfaces/IMapObject";
 import { IMapServerModel } from "../server/interfaces/serverModels/IMapServerModel";
 import { singleton } from "tsyringe";
 import { Camera } from "./Camera";
+import { AnimationManager } from "./managers/AnimationManager";
 
 @singleton()
 export class Ground {
@@ -37,15 +38,10 @@ export class Ground {
             this.camera.attachGround(this);
         });
 
-        this.engineMediator.registerHandler('Camera::Loaded', (data: any) => {
-            this.realX = (data.x * 32) + (this.positionX * 32);
-            this.realY = (data.y * 32) + (this.positionY * 32);
+        this.engineMediator.registerHandler('Camera::Loaded', (camera: any) => {
+            this.realX = (camera.x * 32) + (this.positionX * 32);
+            this.realY = (camera.y * 32) + (this.positionY * 32);
         });
-    }
-
-    public move(direction: string) {
-        this.realX = (this.camera.positionX * 32) + (this.positionX * 32);
-        this.realY = (this.camera.positionY * 32) + (this.positionY * 32);
     }
 
     public isLoaded() : boolean {
@@ -53,10 +49,14 @@ export class Ground {
     }
 
     public getGroundRenderObject() : IMapObject {
+        const { cameraRealX, cameraRealY } = this.camera.getPosition();
+        const x = cameraRealX + this.realX;
+        const y = cameraRealY + this.realY;
+
         return {
             image: this.image as HTMLImageElement,
-            dx: this.realX,
-            dy: this.realY
+            dx: x,
+            dy: y
         };
     }
 }

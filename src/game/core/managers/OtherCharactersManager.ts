@@ -5,6 +5,7 @@ import { IRenderObject } from "../interfaces/IRenderObject";
 import { IOtherCharacterServerModel } from "../../server/interfaces/serverModels/IOtherCharacterServerModel";
 import { singleton } from "tsyringe";
 import { Camera } from "../Camera";
+import { AnimationManager } from "./AnimationManager";
 
 @singleton()
 export class OtherCharactersManager {
@@ -12,6 +13,7 @@ export class OtherCharactersManager {
 
     constructor(
         private engineMediator: EngineMediator,
+        private animationManager: AnimationManager,
         private camera: Camera
     ) {
         this.engineMediator.registerHandler('OtherCharactersManager::Load', (data: IOtherCharacterServerModel) => {
@@ -21,6 +23,7 @@ export class OtherCharactersManager {
             }
 
             this.otherCharacters.push(new OtherCharacter(this.camera,
+                this.animationManager,
                 data.Id, 
                 data.Nick, 
                 data.Outfit,
@@ -33,10 +36,14 @@ export class OtherCharactersManager {
             character.positionX = data.PositionX;
             character.positionY = data.PositionY;     
         });
+
+        this.engineMediator.registerHandler('Character::ChangedDirection', async (direction: string) => {
+            await this.move(direction);
+        });
     }
 
-    public move(direction: string) {
-        this.otherCharacters.map(e => e.move(direction));
+    public async move(direction: string) {
+        this.otherCharacters.map(async funct => await funct.move(direction));
     }
 
     public getCharacterRenderObjects() : IRenderObject[] {

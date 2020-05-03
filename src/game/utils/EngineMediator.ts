@@ -12,7 +12,7 @@ export class EngineMediator {
             return Promise.reject();
         }
 
-        console.log(`EngineMediator->${event.type}`);
+        //console.log(`EngineMediator->${event.type}`);
 
         let prom: Promise<void>[] = [];
 

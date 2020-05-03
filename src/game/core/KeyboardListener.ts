@@ -1,13 +1,17 @@
 import { EngineMediator } from "../utils/EngineMediator";
 import { singleton } from "tsyringe";
 
-export type Direction = 'up' | 'down' | 'left' | 'right' | null;
+export type Direction = 'up' | 'down' | 'left' | 'right' | 'cam_down' | 'cam_right' | 'cam_left'  | 'cam_up' | null;
 
 const DIRECTION_KEY_CODES: { [keyCode: string]: Direction } = {
   'KeyW': 'up', 'ArrowUp': 'up',
   'KeyA': 'left', 'ArrowLeft': 'left',
   'KeyD': 'right', 'ArrowRight': 'right',
-  'KeyS': 'down', 'ArrowDown': 'down'
+  'KeyS': 'down', 'ArrowDown': 'down',
+  'Digit1': 'cam_down',
+  'Digit2': 'cam_right',
+  'Digit3': 'cam_up',
+  'Digit4': 'cam_left'
 };
 
 @singleton()
@@ -21,19 +25,17 @@ export class KeyboardListener {
 
     private handleKeyDownEvent = (event: KeyboardEvent) => {
         const { code } = event;
-        
+
         if (DIRECTION_KEY_CODES.hasOwnProperty(code) == false) { 
             return;
         }
     
         const keyDirection = DIRECTION_KEY_CODES[code];
 
-        if(keyDirection != this.currentDirection) {
-            this.engineMediator.publish({
-                type: 'Character::ChangedDirection',
-                data: keyDirection
-            });
-        }
+        this.engineMediator.publish({
+            type: 'Character::ChangedDirection',
+            data: keyDirection
+        });
 
         this.currentDirection = keyDirection;
     }

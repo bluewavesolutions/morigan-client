@@ -2,11 +2,16 @@ import { singleton } from "tsyringe";
 import { EngineMediator } from "../utils/EngineMediator";
 import { Character } from "./Character";
 import { Ground } from "./Ground";
+import { AnimationManager } from "./managers/AnimationManager";
+import { Direction } from "./KeyboardListener";
 
 @singleton()
 export class Camera {
-    public positionX : number = 0;
-    public positionY: number = 0;
+    private positionX : number = 0;
+    private positionY: number = 0;
+
+    private realX : number = 0;
+    private realY: number = 0;
 
     public maxX : number = 0;
     public maxY: number = 0;
@@ -14,44 +19,70 @@ export class Camera {
     private character: Character;
     private ground: Ground;
 
-    public move(direction: string) {
+    public animationLock: boolean = false;
+
+    constructor(
+        private engineMediator: EngineMediator,
+        private animationManager: AnimationManager
+    ) {
+        this.engineMediator.registerHandler('Character::ChangedDirection', async (direction: Direction) => {
+            await this.move(direction);
+        });
+    }
+
+    public async move(direction: Direction) {
         if (direction === null) {
             return;
         }
 
-        let lock = {
-            left: this.positionX >= 0
-            || this.character.positionX < (window.innerWidth / 2 - 32) / 32,
-            right: this.maxX - this.positionX > 0
-                || this.character.positionY < Math.abs((this.maxX - ((window.innerWidth / 2 + 32) / 32))),
-            up: this.positionY >= 0
-                || this.character.positionY > Math.abs((this.maxY - ((window.innerHeight / 2 + 48) / 32))),
-            down: this.maxY - this.positionY > 0 
-                || this.character.positionY < (window.innerHeight / 2 - 48) / 32
-        };
+        if (direction === 'up' || direction === 'left' || direction === 'right' || direction === 'down') {
+            await this.centerToCharacter();
+            return;
+        }
 
-        if (direction === 'up' && lock.up === false) {
-            this.positionY++;
+        if (this.animationLock) {
+            return;
+        }
+
+        this.character.move(direction);
+
+        if (direction === 'cam_down') {
+            this.positionY -= 2;
         } 
-        if (direction === 'down' && lock.down === false) {
-            this.positionY--;
+
+        if (direction === 'cam_right') {
+            this.positionX -= 2;
         }
-        if (direction === 'left' && lock.left === false) {
-            this.positionX++;
+
+        if (direction === 'cam_up') {
+            this.positionY += 2;
         }
-        if (direction === 'right' && lock.right === false) {
-            this.positionX--;
+
+        if (direction === 'cam_left') {
+            this.positionX += 2;
         }
+
+        const realX = this.positionX * 32;
+        const realY = this.positionY * 32;
+
+        this.animationLock = true;
+
+        await this.animationManager.animateTo(this, { realX, realY }, 1000.0 / 6.5);
+
+        this.animationLock = false;
     }
 
     public attachCharacter(character: Character) {
         this.character = character;
+    }
 
-        const x = (window.innerWidth / 2 - 32) / 32;
-        const y = (window.innerHeight / 2 - 48) / 32;
+    private async centerToCharacter() {
+        if (this.animationLock) {
+            return;
+        }
 
-        this.positionX = -this.character.positionX + x;
-        this.positionY = -this.character.positionY + y;
+        this.positionX = -this.character.positionX + (window.innerWidth / 2 / 32) - 1;
+        this.positionY = -this.character.positionY + (window.innerHeight / 2 / 32) - 1;
 
         if (this.positionX > 0) {
             this.positionX = 0;
@@ -60,6 +91,32 @@ export class Camera {
         if (this.positionY > 0) {
             this.positionY = 0;
         }
+
+        if (this.positionY < this.maxY) {
+            this.positionY = this.maxY;
+        }
+
+        if (this.positionX < this.maxX) {
+            this.positionX = this.maxX;
+        }
+
+        let realX = this.positionX * 32;
+        let realY = this.positionY * 32;
+
+        this.animationLock = true;
+
+        await this.animationManager.animateTo(this, { realX, realY }, 1000.0 / 2.5, (percentage) => {
+            let currentPositionX = this.realX;
+            let currentPositionY = this.realY;
+
+            currentPositionX = Math.round(currentPositionX / 32) * 32;
+            currentPositionY = Math.round(currentPositionY / 32) * 32;
+            
+            realX = currentPositionX;
+            realY = currentPositionY;
+        });
+
+        this.animationLock = false;
     }
 
     public attachGround(ground: Ground) {
@@ -74,8 +131,8 @@ export class Camera {
 
     public getPosition() {
         return {
-            x: this.positionX,
-            y: this.positionY
+            cameraRealX: this.realX,
+            cameraRealY: this.realY
         }
     }
 }
