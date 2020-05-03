@@ -48,7 +48,7 @@ export class Ground {
         return typeof(this.image) !== typeof(undefined);
     }
 
-    public getGroundRenderObject() : IMapObject {
+    public prepareRendererObject() : IMapObject {
         const { cameraRealX, cameraRealY } = this.camera.getPosition();
         const x = cameraRealX + this.realX;
         const y = cameraRealY + this.realY;

@@ -2,8 +2,9 @@ import { IRenderObject } from "../core/renderer/interfaces/IRenderObject";
 import { Camera } from "./Camera";
 import { AnimationManager } from "../core/animations/AnimationManager";
 import { Direction } from "../managers/KeyboardManager";
+import { IRenderableComponent } from "../core/renderer/interfaces/IRenderableComponent";
 
-export class OtherCharacter {
+export class OtherCharacter implements IRenderableComponent {
     private camera: Camera;
     private animationManager: AnimationManager;
     public id: number;
@@ -106,7 +107,7 @@ export class OtherCharacter {
         }
     }
 
-    public getRenderereObject() : IRenderObject {
+    public prepareRendererObject() : IRenderObject {
         const characterWidth = 32;
         const characterHeight = 48;
 

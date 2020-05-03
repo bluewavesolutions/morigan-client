@@ -43,11 +43,11 @@ export class Renderer {
 
         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
         if(this.ground.isLoaded()) {
-            const ground = this.ground.getGroundRenderObject();
+            const ground = this.ground.prepareRendererObject();
             context.drawImage(ground.image, ground.dx, ground.dy);
         }
 
-        for(let renderObject of otherCharactersManager.getCharacterRenderObjects()) {
+        for(let renderObject of otherCharactersManager.prepareRendererObjects()) {
             context.drawImage(renderObject.image, 
                 renderObject.sx, 
                 renderObject.sy,
@@ -60,7 +60,7 @@ export class Renderer {
         }
 
         if (this.character.isLoaded()) {
-            const character = this.character.getCharacterRenderObject();
+            const character = this.character.prepareRendererObject();
 
             context.drawImage(character.image, 
                 character.sx, 

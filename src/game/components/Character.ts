@@ -6,9 +6,10 @@ import { Camera } from "./Camera";
 import { Direction } from "../managers/KeyboardManager";
 import { IRenderObject } from "../core/renderer/interfaces/IRenderObject";
 import { AnimationManager } from "../core/animations/AnimationManager";
+import { IRenderableComponent } from "../core/renderer/interfaces/IRenderableComponent";
 
 @singleton()
-export class Character {
+export class Character implements IRenderableComponent {
     private id: number = 0;
 
     private image: HTMLImageElement | undefined;
@@ -168,7 +169,7 @@ export class Character {
         return typeof(this.image) !== typeof(undefined);
     }
 
-    public getCharacterRenderObject() : IRenderObject {
+    public prepareRendererObject() : IRenderObject {
         const characterWidth = 32;
         const characterHeight = 48;
 

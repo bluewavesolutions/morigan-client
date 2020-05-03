@@ -37,7 +37,7 @@ export class OtherCharactersManager {
         });
     }
 
-    public getCharacterRenderObjects() : IRenderObject[] {
-        return this.otherCharacters.map(e => e.getRenderereObject());
+    public prepareRendererObjects() : IRenderObject[] {
+        return this.otherCharacters.map(e => e.prepareRendererObject());
     }
 }
