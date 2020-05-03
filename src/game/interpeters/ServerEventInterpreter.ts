@@ -1,6 +1,6 @@
-import { EngineMediator } from "../utils/EngineMediator";
+import { Mediator } from "../core/events/Mediator";
 import { EngineStore } from "../store/EngineStore";
-import { IServerCommunicationFrame } from "../server/interfaces/IServerCommunicationFrame";
+import { IServerCommunicationFrame } from "../communication/interfaces/IServerCommunicationFrame";
 import { IServerEventInterpreter } from "./interfaces/ISeverEventInterpreter";
 import { GameLoadedEventInterpreter } from "./serverEventInterpreters/GameLoadedEventInterpreter";
 import { EngineErrorEventInterpreter } from "./serverEventInterpreters/EngineErrorEventInterpreter";
@@ -11,10 +11,10 @@ import { singleton } from "tsyringe";
 @singleton()
 export class ServerEventInterpreter {
     constructor(
-        private engineMediator: EngineMediator,
+        private mediator: Mediator,
         private engineStore: EngineStore
     ) {
-        this.engineMediator.registerHandler('Server::OnMessage', async (serverCommunicationFrame: any) => {
+        this.mediator.registerHandler('Server::OnMessage', async (serverCommunicationFrame: any) => {
             await this.execute(JSON.parse(serverCommunicationFrame));
         });
     }
@@ -24,15 +24,15 @@ export class ServerEventInterpreter {
         
         switch (serverCommunicationFrame.Type) {
             case 'GAME_LOADED' : {
-                serverEventInterpreter = new GameLoadedEventInterpreter(this.engineMediator, this.engineStore);
+                serverEventInterpreter = new GameLoadedEventInterpreter(this.mediator, this.engineStore);
                 break;
             }
             case 'OTHER_CHARACTER_LOADED' : {
-                serverEventInterpreter = new OtherCharacterLoadedEventInterpreter(this.engineMediator);
+                serverEventInterpreter = new OtherCharacterLoadedEventInterpreter(this.mediator);
                 break;
             }
             case 'OTHER_CHARACTER_MOVED' : {
-                serverEventInterpreter = new OtherCharacterMovedEventInterpreter(this.engineMediator);
+                serverEventInterpreter = new OtherCharacterMovedEventInterpreter(this.mediator);
                 break;
             }
             case 'ENGINE_ERROR' : {

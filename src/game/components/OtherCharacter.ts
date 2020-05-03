@@ -1,6 +1,6 @@
-import { IRenderObject } from "./interfaces/IRenderObject";
+import { IRenderObject } from "../core/renderer/interfaces/IRenderObject";
 import { Camera } from "./Camera";
-import { AnimationManager } from "./managers/AnimationManager";
+import { AnimationManager } from "../core/animations/AnimationManager";
 
 export class OtherCharacter {
     private camera: Camera;

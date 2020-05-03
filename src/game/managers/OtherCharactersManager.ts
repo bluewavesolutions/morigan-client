@@ -1,22 +1,23 @@
-import { EngineMediator } from "../../utils/EngineMediator";
-import { OtherCharacter } from "../OtherCharacter";
-import { IOtherCharacterMovedResponse } from "../../server/interfaces/responses/IOtherCharacterMovedResponse";
-import { IRenderObject } from "../interfaces/IRenderObject";
-import { IOtherCharacterServerModel } from "../../server/interfaces/serverModels/IOtherCharacterServerModel";
+
+import { OtherCharacter } from "../components/OtherCharacter";
+import { IOtherCharacterMovedResponse } from "../communication/interfaces/responses/IOtherCharacterMovedResponse";
+import { IRenderObject } from "../core/renderer/interfaces/IRenderObject";
+import { IOtherCharacterServerModel } from "../communication/interfaces/serverModels/IOtherCharacterServerModel";
 import { singleton } from "tsyringe";
-import { Camera } from "../Camera";
-import { AnimationManager } from "./AnimationManager";
+import { Camera } from "../components/Camera";
+import { Mediator } from "../core/events/Mediator";
+import { AnimationManager } from "../core/animations/AnimationManager";
 
 @singleton()
 export class OtherCharactersManager {
     private otherCharacters: OtherCharacter[] = [];
 
     constructor(
-        private engineMediator: EngineMediator,
+        private mediator: Mediator,
         private animationManager: AnimationManager,
         private camera: Camera
     ) {
-        this.engineMediator.registerHandler('OtherCharactersManager::Load', (data: IOtherCharacterServerModel) => {
+        this.mediator.registerHandler('OtherCharactersManager::Load', (data: IOtherCharacterServerModel) => {
             let findIndex = this.otherCharacters.findIndex(e => e.id == data.Id);
             if(findIndex >= 0) {
                 return;
@@ -31,13 +32,13 @@ export class OtherCharactersManager {
                 data.PositionY));
         });
 
-        this.engineMediator.registerHandler('OtherCharactersManager::Moved', (data: IOtherCharacterMovedResponse) => {
+        this.mediator.registerHandler('OtherCharactersManager::Moved', (data: IOtherCharacterMovedResponse) => {
             let character = this.otherCharacters.find((e) => e.id == data.Id) as OtherCharacter;
             character.positionX = data.PositionX;
             character.positionY = data.PositionY;     
         });
 
-        this.engineMediator.registerHandler('Character::ChangedDirection', async (direction: string) => {
+        this.mediator.registerHandler('Character::ChangedDirection', async (direction: string) => {
             await this.move(direction);
         });
     }

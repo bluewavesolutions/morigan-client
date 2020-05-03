@@ -1,13 +1,13 @@
 import "reflect-metadata";
 import { container } from 'tsyringe';
-import { EngineMediator } from "./game/utils/EngineMediator";
-import { Server } from "./game/server/Server";
-import { Renderer } from "./game/core/Renderer";
+import { Mediator } from "./game/core/events/Mediator";
+import { Server } from "./game/communication/Server";
+import { Renderer } from "./game/core/renderer/Renderer";
 import { ServerEventInterpreter } from "./game/interpeters/ServerEventInterpreter";
-import { KeyboardListener } from "./game/core/KeyboardListener";
+import { KeyboardListener } from "./game/managers/KeyboardManager";
 import './index.css';
 
-const engineMediator = container.resolve(EngineMediator);
+const mediator = container.resolve(Mediator);
 const serverEventInterpreter = container.resolve(ServerEventInterpreter);
 const keyboardListener = container.resolve(KeyboardListener);
 
@@ -17,11 +17,11 @@ renderer.start();
 const server = container.resolve(Server);
 server.connect();
 
-engineMediator.registerHandler('Server::OnSocketOpen', () => {
+mediator.registerHandler('Server::OnSocketOpen', () => {
 });
 
-engineMediator.registerHandler('Character::Loaded', () => {
+mediator.registerHandler('Character::Loaded', () => {
 });
 
-engineMediator.registerHandler('Ground::Loaded', () => {
+mediator.registerHandler('Ground::Loaded', () => {
 });

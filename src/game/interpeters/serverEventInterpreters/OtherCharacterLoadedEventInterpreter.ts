@@ -1,18 +1,17 @@
-import { IOtherCharacterLoadedResponse } from "../../server/interfaces/responses/IOtherCharacterLoadedResponse";
+import { IOtherCharacterLoadedResponse } from "../../communication/interfaces/responses/IOtherCharacterLoadedResponse";
 import { IServerEventInterpreter } from "../interfaces/ISeverEventInterpreter";
-import { EngineMediator } from "../../utils/EngineMediator";
+import { Mediator } from "../../core/events/Mediator";
 
 export class OtherCharacterLoadedEventInterpreter implements IServerEventInterpreter<IOtherCharacterLoadedResponse> {
-    private engineMediator: EngineMediator;
-
-    constructor(engineMediator: EngineMediator) {
-        this.engineMediator = engineMediator;
+    constructor(
+        private mediator: Mediator
+    ) {
     }
 
     public async execute(data: IOtherCharacterLoadedResponse) : Promise<void> {
         console.log(data);
 
-        await this.engineMediator.publish({ 
+        await this.mediator.publish({ 
             type: 'OtherCharactersManager::Load', 
             data: data
         });

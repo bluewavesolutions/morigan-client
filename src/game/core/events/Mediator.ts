@@ -1,8 +1,8 @@
-import { IGameEvent } from "../core/interfaces/IGameEvent";
+import { IGameEvent } from "./interfaces/IGameEvent";
 import { singleton } from "tsyringe";
 
 @singleton()
-export class EngineMediator {
+export class Mediator {
     private handlers: Map<string, any[]> = new Map();
 
     public async publish(event: IGameEvent) {

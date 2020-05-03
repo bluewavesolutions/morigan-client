@@ -1,11 +1,11 @@
-import { EngineMediator } from "../utils/EngineMediator";
-import { IRenderObject } from "./interfaces/IRenderObject";
+import { Mediator } from "../core/events/Mediator";
 import { EngineStore } from "../store/EngineStore";
-import { ICharacterServerModel } from "../server/interfaces/serverModels/ICharacterServerModel";
+import { ICharacterServerModel } from "../communication/interfaces/serverModels/ICharacterServerModel";
 import { singleton } from "tsyringe";
 import { Camera } from "./Camera";
-import { AnimationManager } from "./managers/AnimationManager";
-import { Direction } from "./KeyboardListener";
+import { Direction } from "../managers/KeyboardManager";
+import { IRenderObject } from "../core/renderer/interfaces/IRenderObject";
+import { AnimationManager } from "../core/animations/AnimationManager";
 
 @singleton()
 export class Character {
@@ -33,12 +33,12 @@ export class Character {
     private lastDirection: string = '';
 
     constructor(
-        private engineMediator: EngineMediator,
+        private mediator: Mediator,
         private engineStore: EngineStore,
         private camera: Camera,
         private animationManager: AnimationManager
     ) {
-        this.engineMediator.registerHandler('Character::Load', (characterServerModel: ICharacterServerModel) => {
+        this.mediator.registerHandler('Character::Load', (characterServerModel: ICharacterServerModel) => {
             this.id = characterServerModel.Id;
             this.positionX = characterServerModel.PositionX;
             this.positionY = characterServerModel.PositionY;
@@ -52,7 +52,7 @@ export class Character {
             this.camera.attachCharacter(this);
         });
 
-        this.engineMediator.registerHandler('Character::ChangedDirection', async (direction: Direction) => {
+        this.mediator.registerHandler('Character::ChangedDirection', async (direction: Direction) => {
             await this.move(direction);
             if (direction === null) {
                 this.direction(this.lastDirection);
@@ -123,7 +123,7 @@ export class Character {
         this.realY = (positionY) * 32;
         this.animationLock = false;
 
-        this.engineMediator.publish({
+        this.mediator.publish({
             type: 'Server::SendMessage',
             data: {
                 Type: 'MOVE',

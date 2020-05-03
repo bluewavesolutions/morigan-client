@@ -1,5 +1,5 @@
 import { IServerEventInterpreter } from "../interfaces/ISeverEventInterpreter";
-import { IEngineErrorResponse } from "../../server/interfaces/responses/IEngineErrorResponse";
+import { IEngineErrorResponse } from "../../communication/interfaces/responses/IEngineErrorResponse";
 
 export class EngineErrorEventInterpreter implements IServerEventInterpreter<IEngineErrorResponse> {
     async execute(data: IEngineErrorResponse): Promise<void> {

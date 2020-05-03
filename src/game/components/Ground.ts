@@ -1,9 +1,8 @@
-import { EngineMediator } from "../utils/EngineMediator";
-import { IMapObject } from "./interfaces/IMapObject";
-import { IMapServerModel } from "../server/interfaces/serverModels/IMapServerModel";
+import { Mediator } from "../core/events/Mediator";
+import { IMapObject } from "../core/renderer/interfaces/IMapObject";
+import { IMapServerModel } from "../communication/interfaces/serverModels/IMapServerModel";
 import { singleton } from "tsyringe";
 import { Camera } from "./Camera";
-import { AnimationManager } from "./managers/AnimationManager";
 
 @singleton()
 export class Ground {
@@ -22,10 +21,10 @@ export class Ground {
     public realY = 0;
 
     constructor(
-        private engineMediator: EngineMediator,
+        private mediator: Mediator,
         private camera: Camera
     ) {
-        this.engineMediator.registerHandler('Ground::Load', (mapServerModel: IMapServerModel) => {
+        this.mediator.registerHandler('Ground::Load', (mapServerModel: IMapServerModel) => {
             this.widthInPixels = mapServerModel.WidthInPixels;
             this.heightInPixels = mapServerModel.HeightInPixels;
 

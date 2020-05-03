@@ -1,6 +1,6 @@
 import { singleton } from "tsyringe";
-import { IAnimationDelta } from "../interfaces/IAnimationDelta";
-import { IAnimation } from "../interfaces/IAnimation";
+import { IAnimationDelta } from "./interfaces/IAnimationDelta";
+import { IAnimation } from "./interfaces/IAnimation";
 
 @singleton()
 export class AnimationManager {
@@ -14,7 +14,7 @@ export class AnimationManager {
         const animationDelta = {};
     
         for (let key in params) {
-            if (!target.hasOwnProperty(key)) {
+            if (target.hasOwnProperty(key) === false) {
                 throw new Error(`Target does not have property "${key}"!`);
             }
     

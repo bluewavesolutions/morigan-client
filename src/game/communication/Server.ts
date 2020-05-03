@@ -1,4 +1,4 @@
-import { EngineMediator } from "../utils/EngineMediator";
+import { Mediator } from "../core/events/Mediator";
 import { EngineStore } from "../store/EngineStore";
 import { IServerCommunicationFrame } from "./interfaces/IServerCommunicationFrame";
 import { ILoadGameRequest } from './interfaces/requests/ILoadGameRequest';
@@ -9,7 +9,7 @@ export class Server {
     private webSocket: WebSocket | undefined;
 
     constructor(
-        private engineMediator: EngineMediator,
+        private mediator: Mediator,
         private engineStore: EngineStore
     ) {
     }
@@ -19,17 +19,17 @@ export class Server {
         //http://localhost:8989/
         //"wss://game-alpha.morigan.pl/ws"
 
-        this.engineMediator.registerHandler('Server::SendMessage', (data: IServerCommunicationFrame) => {
+        this.mediator.registerHandler('Server::SendMessage', (data: IServerCommunicationFrame) => {
             this.webSocket?.send(JSON.stringify(data));
         });
 
         this.webSocket.onopen = (event: Event) => {
-            this.engineMediator.publish({
+            this.mediator.publish({
                 type: 'Server::OnSocketOpen',
                 data: event
             });
 
-            this.engineMediator.publish({
+            this.mediator.publish({
                 type: 'Server::SendMessage',
                 data: {
                     Type: 'LOAD_GAME',
@@ -42,14 +42,14 @@ export class Server {
         };
 
         this.webSocket.onclose = (event: CloseEvent) => {
-            this.engineMediator.publish({
+            this.mediator.publish({
                 type: 'Server::OnSocketClose',
                 data: event
             });
         }
 
         this.webSocket.onmessage = (event: MessageEvent) => {
-            this.engineMediator.publish({
+            this.mediator.publish({
                 type: 'Server::OnMessage',
                 data: event.data as IServerCommunicationFrame
             });

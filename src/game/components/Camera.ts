@@ -1,9 +1,9 @@
 import { singleton } from "tsyringe";
-import { EngineMediator } from "../utils/EngineMediator";
+import { Mediator } from "../core/events/Mediator";
 import { Character } from "./Character";
 import { Ground } from "./Ground";
-import { AnimationManager } from "./managers/AnimationManager";
-import { Direction } from "./KeyboardListener";
+import { Direction } from "../managers/KeyboardManager";
+import { AnimationManager } from "../core/animations/AnimationManager";
 
 @singleton()
 export class Camera {
@@ -22,10 +22,10 @@ export class Camera {
     public animationLock: boolean = false;
 
     constructor(
-        private engineMediator: EngineMediator,
+        private mediator: Mediator,
         private animationManager: AnimationManager
     ) {
-        this.engineMediator.registerHandler('Character::ChangedDirection', async (direction: Direction) => {
+        this.mediator.registerHandler('Character::ChangedDirection', async (direction: Direction) => {
             await this.move(direction);
         });
     }

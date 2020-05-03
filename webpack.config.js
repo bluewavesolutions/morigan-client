@@ -11,7 +11,7 @@ const plugins = [
     }
   }),
   new HtmlWebpackPlugin({
-    title: 'Typescript Webpack Starter',
+    title: 'MORIGAN MMORPG 2D',
     template: '!!ejs-loader!src/index.html'
   }),
   new webpack.LoaderOptionsPlugin({

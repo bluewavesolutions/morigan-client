@@ -1,8 +1,8 @@
-import { Ground } from "./Ground";
-import { Character } from "./Character";
-import { OtherCharactersManager } from "./managers/OtherCharactersManager";
+import { Ground } from "../../components/Ground";
+import { OtherCharactersManager } from "../../managers/OtherCharactersManager";
 import { injectable } from "tsyringe";
-import { AnimationManager } from "./managers/AnimationManager";
+import { Character } from "../../components/Character";
+import { AnimationManager } from "../animations/AnimationManager";
 
 @injectable()
 export class Renderer {
