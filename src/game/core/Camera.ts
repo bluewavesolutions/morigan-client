@@ -36,7 +36,6 @@ export class Camera {
         }
 
         if (direction === 'up' || direction === 'left' || direction === 'right' || direction === 'down') {
-            await this.centerToCharacter();
             return;
         }
 
@@ -76,44 +75,41 @@ export class Camera {
         this.character = character;
     }
 
-    private async centerToCharacter() {
+    public async centerToCharacter() {
+        let positionX = -this.character.positionX + (window.innerWidth / 2 / 32) - 1;
+        let positionY = -this.character.positionY + (window.innerHeight / 2 / 32) - 1;
+
+        if (positionX > 0) {
+            positionX = 0;
+        }
+
+        if (positionY > 0) {
+            positionY = 0;
+        }
+
+        if (positionY < this.maxY) {
+            positionY = this.maxY;
+        }
+
+        if (positionX < this.maxX) {
+            positionX = this.maxX;
+        }
+
         if (this.animationLock) {
+            if (Math.abs(positionX - this.positionX) > 1 || Math.abs(positionY - this.positionY) > 1) {
+                this.animationManager.updateAnimation(this, { positionX, positionY }, 1000.0);
+            } else {
+                this.animationManager.updateAnimation(this, { positionX, positionY }, 2500.0);
+            }    
+
             return;
         }
 
-        this.positionX = -this.character.positionX + (window.innerWidth / 2 / 32) - 1;
-        this.positionY = -this.character.positionY + (window.innerHeight / 2 / 32) - 1;
-
-        if (this.positionX > 0) {
-            this.positionX = 0;
-        }
-
-        if (this.positionY > 0) {
-            this.positionY = 0;
-        }
-
-        if (this.positionY < this.maxY) {
-            this.positionY = this.maxY;
-        }
-
-        if (this.positionX < this.maxX) {
-            this.positionX = this.maxX;
-        }
-
-        let realX = this.positionX * 32;
-        let realY = this.positionY * 32;
-
         this.animationLock = true;
 
-        await this.animationManager.animateTo(this, { realX, realY }, 1000.0 / 2.5, (percentage) => {
-            let currentPositionX = this.realX;
-            let currentPositionY = this.realY;
-
-            currentPositionX = Math.round(currentPositionX / 32) * 32;
-            currentPositionY = Math.round(currentPositionY / 32) * 32;
-            
-            realX = currentPositionX;
-            realY = currentPositionY;
+        await this.animationManager.animateTo(this, { positionX, positionY }, 2500.0, (percentage) => {
+            this.realX = this.positionX * 32;
+            this.realY = this.positionY * 32;
         });
 
         this.animationLock = false;

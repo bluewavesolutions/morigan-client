@@ -59,6 +59,35 @@ export class AnimationManager {
         return result;
     };
 
+    public updateAnimation = (
+        target: any, 
+        params: { [key: string]: number },
+        duration: number
+    ) => {
+        for (let animation of this.currentAnimations) {
+            if(animation.target === target) {
+                const animationDelta = {};
+    
+                for (let key in params) {
+                    if (!target.hasOwnProperty(key)) {
+                        throw new Error(`Target does not have property "${key}"!`);
+                    }
+            
+                    animationDelta[key] = params[key] - target[key];
+                }
+
+                animation.animationDelta = animationDelta;
+                animation.start = performance.now();
+                animation.duration = duration;
+                animation.lastUpdate = performance.now();
+                const finishResult = this.generateFinishResult(target, animation.animationDelta);
+                animation.finishResult = finishResult;
+                
+                return;
+            }
+        }
+    }
+
     public update = (time: number) => {
         for (let animation of this.currentAnimations) {
             const timeDelta = time - animation.lastUpdate;
