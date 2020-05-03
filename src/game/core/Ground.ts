@@ -36,11 +36,7 @@ export class Ground {
             this.height = mapServerModel.Height;
 
             this.camera.attachGround(this);
-        });
-
-        this.engineMediator.registerHandler('Camera::Loaded', (camera: any) => {
-            this.realX = (camera.x * 32) + (this.positionX * 32);
-            this.realY = (camera.y * 32) + (this.positionY * 32);
+            this.camera.centerToCharacter();
         });
     }
 

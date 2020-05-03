@@ -58,11 +58,6 @@ export class Character {
                 this.direction(this.lastDirection);
             }
         });
-
-        this.engineMediator.registerHandler('Camera::Loaded', (data: any) => {
-            this.realX = (data.x * 32) + (this.positionX * 32);
-            this.realY = (data.y * 32) + (this.positionY * 32);
-        });
     }
 
     public async move(direction: Direction) {
@@ -140,7 +135,7 @@ export class Character {
             }
         })
 
-        await this.camera.centerToCharacter();
+        await this.camera.centerToCharacterAnimated();
     }
 
     public async direction(direction: string) {

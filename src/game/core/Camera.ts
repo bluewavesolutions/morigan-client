@@ -76,24 +76,16 @@ export class Camera {
     }
 
     public async centerToCharacter() {
-        let positionX = -this.character.positionX + (window.innerWidth / 2 / 32) - 1;
-        let positionY = -this.character.positionY + (window.innerHeight / 2 / 32) - 1;
+        let { positionX, positionY } = this.calculateCameraPosition();
 
-        if (positionX > 0) {
-            positionX = 0;
-        }
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.realX = positionX * 32;
+        this.realY = positionY * 32;
+    }
 
-        if (positionY > 0) {
-            positionY = 0;
-        }
-
-        if (positionY < this.maxY) {
-            positionY = this.maxY;
-        }
-
-        if (positionX < this.maxX) {
-            positionX = this.maxX;
-        }
+    public async centerToCharacterAnimated() {
+        let { positionX, positionY } = this.calculateCameraPosition();
 
         if (this.animationLock) {
             if (Math.abs(positionX - this.positionX) > 1 || Math.abs(positionY - this.positionY) > 1) {
@@ -113,6 +105,32 @@ export class Camera {
         });
 
         this.animationLock = false;
+    }
+
+    private calculateCameraPosition() {
+        let positionX = -this.character.positionX + (window.innerWidth / 2 / 32) - 1;
+        let positionY = -this.character.positionY + (window.innerHeight / 2 / 32) - 1;
+
+        if (positionX > 0) {
+            positionX = 0;
+        }
+
+        if (positionY > 0) {
+            positionY = 0;
+        }
+
+        if (positionY < this.maxY) {
+            positionY = this.maxY;
+        }
+
+        if (positionX < this.maxX) {
+            positionX = this.maxX;
+        }
+
+        return {
+            positionX,
+            positionY
+        };
     }
 
     public attachGround(ground: Ground) {
