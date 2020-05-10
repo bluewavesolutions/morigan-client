@@ -19,6 +19,11 @@ export class Engine {
     }
 
     public start() {
+        this.mediator.registerHandler('Server::OnSocketClose', () => {
+            let div = document.getElementById('connection_problem');
+            div.style.display = 'block';
+        });
+
         this.mediator.registerHandler('Server::OnSocketOpen', () => {
             this.loadedComponents.server = true;
             this.loadingInformation('Connected to server.');

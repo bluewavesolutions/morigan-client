@@ -16,12 +16,33 @@
       padding: 0;
       margin: 0;
     }
+
+    #loader {
+      width:100%; 
+      height:100%; 
+      position:absolute; 
+      background: #000; 
+      color: #fff;
+    }
+
+    #connection_problem {
+      width:100%; 
+      height:100%; 
+      position:absolute; 
+      background: #000; 
+      color: #fff;
+      display: none;
+    }
+
   </style>
 </head>
 
 <body style="background: #000;">
-    <div id="loader" style="width:100%; height:100%; position:absolute; background: #000; color: #fff;">
+    <div id="loader">
       Loading...
+    </div>
+    <div id="connection_problem">
+      Problem with connection...
     </div>
     <canvas id="game">
     </canvas>
