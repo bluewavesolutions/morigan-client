@@ -41,9 +41,8 @@ export class OtherCharacter implements IRenderableComponent {
         this.image = new Image();
         this.image.src = this.outfit;
 
-        const { cameraRealX, cameraRealY } = this.camera.getPosition();
-        this.realX = (cameraRealX) + (this.positionX * 32);
-        this.realY = (cameraRealY) + (this.positionY * 32);
+        this.realX = (this.positionX * 32);
+        this.realY = (this.positionY * 32);
     }
 
     public async move(x: number, y: number) {
