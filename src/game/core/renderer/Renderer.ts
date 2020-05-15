@@ -4,6 +4,7 @@ import { injectable } from "tsyringe";
 import { Character } from "../../components/Character";
 import { AnimationManager } from "../animations/AnimationManager";
 import { Tooltip } from "../../components/Tooltip";
+import { GameWindow } from "./GameWindow";
 
 @injectable()
 export class Renderer {
@@ -12,6 +13,7 @@ export class Renderer {
 
     constructor(
         private animationManager: AnimationManager,
+        private gameWindow: GameWindow,
         private character: Character,
         private ground: Ground,
         private tooltip: Tooltip,
@@ -20,7 +22,9 @@ export class Renderer {
         this.canvas = document.getElementById('game') as HTMLCanvasElement;
         this.context = this.canvas.getContext('2d', {alpha: false}) as CanvasRenderingContext2D;
 
-        window.addEventListener('load', () => {
+        this.resizeCanvas();
+
+        window.addEventListener('DOMContentLoaded', () => {
             this.resizeCanvas();
         }, false);
 
@@ -30,18 +34,15 @@ export class Renderer {
     }
 
     private resizeCanvas() {
-        this.canvas.width = window.innerWidth - 5;
-        this.canvas.height = window.innerHeight - 5;
+        const { width, height } = this.gameWindow.dimensions();
 
-        let rect = this.canvas.getBoundingClientRect();
-
-        this.canvas.width = rect.width * window.devicePixelRatio;
-        this.canvas.height = rect.height * window.devicePixelRatio;
+        this.canvas.width = width * window.devicePixelRatio;
+        this.canvas.height = height * window.devicePixelRatio;
 
         this.context.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-        this.canvas.style.width = `${rect.width}px`;
-        this.canvas.style.height = `${rect.height}px`;
+        this.canvas.style.width = `${width}px`;
+        this.canvas.style.height = `${height}px`;
     }
 
     public start() {
@@ -56,6 +57,9 @@ export class Renderer {
         const { context, otherCharactersManager } = this;
 
         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+        context.fillStyle = "#000";
+        context.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
         if (this.ground.isLoaded()) {
             const ground = this.ground.prepareRendererObject();

@@ -4,6 +4,7 @@ import { Character } from "./Character";
 import { Ground } from "./Ground";
 import { Direction } from "../managers/KeyboardManager";
 import { AnimationManager } from "../core/animations/AnimationManager";
+import { GameWindow } from "../core/renderer/GameWindow";
 
 @singleton()
 export class Camera {
@@ -23,6 +24,7 @@ export class Camera {
 
     constructor(
         private mediator: Mediator,
+        private gameWindow: GameWindow,
         private animationManager: AnimationManager
     ) {
         this.mediator.registerHandler('Character::ChangedDirection', async (direction: Direction) => {
@@ -108,8 +110,10 @@ export class Camera {
     }
 
     private calculateCameraPosition() {
-        let positionX = -this.character.positionX + (window.innerWidth / 2 / 32) - 1;
-        let positionY = -this.character.positionY + (window.innerHeight / 2 / 32) - 1;
+        const { width, height } = this.gameWindow.dimensions();
+
+        let positionX = -this.character.positionX + (width / 2 / 32) - 1;
+        let positionY = -this.character.positionY + (height / 2 / 32) - 1;
 
         if (positionX > 0) {
             positionX = 0;
@@ -136,18 +140,20 @@ export class Camera {
     public attachGround(ground: Ground) {
         this.ground = ground;
 
-        const x = (window.innerWidth) / 32;
-        const y = (window.innerHeight) / 32;
+        const { width, height } = this.gameWindow.dimensions();
+
+        const x = (width) / 32;
+        const y = (height) / 32;
 
         let offsetX = 0;
         let offsetY = 0;
 
-        if (window.innerWidth > this.ground.width * 32) {
-            offsetX = (window.innerWidth - (this.ground.width * 32)) / 2 / 32;
+        if (width > this.ground.width * 32) {
+            offsetX = (width - (this.ground.width * 32)) / 2 / 32;
         }
 
-        if (window.innerHeight > this.ground.height * 32) {
-            offsetY = (window.innerHeight - (this.ground.height * 32)) / 2 / 32;
+        if (height > this.ground.height * 32) {
+            offsetY = (height - (this.ground.height * 32)) / 2 / 32;
         }
 
         this.maxX = -this.ground.width + x - offsetX;
