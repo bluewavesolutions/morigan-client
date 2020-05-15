@@ -3,6 +3,7 @@ import { OtherCharactersManager } from "../../managers/OtherCharactersManager";
 import { injectable } from "tsyringe";
 import { Character } from "../../components/Character";
 import { AnimationManager } from "../animations/AnimationManager";
+import { Tooltip } from "../../components/Tooltip";
 
 @injectable()
 export class Renderer {
@@ -13,6 +14,7 @@ export class Renderer {
         private animationManager: AnimationManager,
         private character: Character,
         private ground: Ground,
+        private tooltip: Tooltip,
         private otherCharactersManager: OtherCharactersManager
     ) {
         this.canvas = document.getElementById('game') as HTMLCanvasElement;
@@ -70,6 +72,33 @@ export class Renderer {
                 character.dy,
                 character.dw,
                 character.dh);
+        }
+
+        if (this.tooltip.isVisible()) {
+            const tooltip = this.tooltip.prepareRendererObject();
+            context.save();
+
+            context.fillStyle = '#18521D';
+            context.fillRect(tooltip.x + 4, 
+                tooltip.y - 11, 
+                context.measureText(tooltip.text).width + 10, 
+                13);
+
+            context.strokeStyle = '#ffff00';
+            context.strokeRect(tooltip.x + 4, 
+                tooltip.y - 11, 
+                context.measureText(tooltip.text).width + 10, 
+                13);
+            
+            context.fillStyle = '#ffff00';
+            context.lineWidth = 0.5;
+            context.font = "12px Arial";
+            context.fillText(tooltip.text, 
+                tooltip.x + 8, 
+                tooltip.y,
+                context.measureText(tooltip.text).width);
+            
+            context.restore();
         }
 
         requestAnimationFrame((time: number) => {

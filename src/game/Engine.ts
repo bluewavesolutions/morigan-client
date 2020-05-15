@@ -1,14 +1,16 @@
 import { container } from "tsyringe";
 import { Mediator } from "./core/events/Mediator";
 import { ServerEventInterpreter } from "./interpeters/ServerEventInterpreter";
-import { KeyboardListener } from "./managers/KeyboardManager";
+import { KeyboardManager } from "./managers/KeyboardManager";
 import { Server } from "./communication/Server";
 import { Renderer } from "./core/renderer/Renderer";
+import { MouseManager } from "./managers/MouseManager";
 
 export class Engine {
     private mediator = container.resolve(Mediator);
     private serverEventInterpreter = container.resolve(ServerEventInterpreter);
-    private keyboardListener = container.resolve(KeyboardListener);
+    private keyboardManager = container.resolve(KeyboardManager);
+    private mouseManager = container.resolve(MouseManager);
     private renderer = container.resolve(Renderer);
     private server = container.resolve(Server);
 

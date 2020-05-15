@@ -3,6 +3,7 @@ import { Camera } from "./Camera";
 import { AnimationManager } from "../core/animations/AnimationManager";
 import { Direction } from "../managers/KeyboardManager";
 import { IRenderableComponent } from "../core/renderer/interfaces/IRenderableComponent";
+import { Mediator } from "../core/events/Mediator";
 
 export class OtherCharacter implements IRenderableComponent {
     private camera: Camera;
@@ -23,6 +24,7 @@ export class OtherCharacter implements IRenderableComponent {
     private animationLock: boolean = false;
 
     constructor(camera: Camera,
+        mediator: Mediator,
         animationManager: AnimationManager,
         id: number,
         nick: string,
@@ -43,6 +45,29 @@ export class OtherCharacter implements IRenderableComponent {
 
         this.realX = (this.positionX * 32);
         this.realY = (this.positionY * 32);
+
+        mediator.registerHandler('MouseManager::MouseMove', (data: any) => {
+            const { cameraRealX, cameraRealY } = this.camera.getPosition();
+
+            const correctPositionX = data.clientX >= this.realX + cameraRealX && data.clientX <= this.realX + cameraRealX + 32;
+            const correctPositionY = data.clientY >= this.realY + cameraRealY && data.clientY <= this.realY + 48 + cameraRealY;
+
+            if (correctPositionX && correctPositionY) {
+                mediator.publish({
+                    type: 'Tooltip::Show',
+                    data: {
+                        text: this.nick,
+                        x: this.realX + cameraRealX,
+                        y: this.realY + cameraRealY
+                    }
+                });
+            } else {
+                mediator.publish({
+                    type: 'Tooltip::Hide',
+                    data: {}
+                });
+            }
+        });
     }
 
     public async move(x: number, y: number) {

@@ -15,7 +15,7 @@ const DIRECTION_KEY_CODES: { [keyCode: string]: Direction } = {
 };
 
 @singleton()
-export class KeyboardListener {
+export class KeyboardManager {
     private currentDirection: Direction = null;
 
     constructor(private mediator: Mediator) {

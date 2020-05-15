@@ -71,7 +71,7 @@ export class Character implements IRenderableComponent {
             return;
         }
 
-        if (direction === 'cam_up' || direction === 'cam_down' || direction === 'cam_left' || direction == 'cam_right') {
+        if (direction === 'cam_up' || direction === 'cam_down' || direction === 'cam_left' || direction === 'cam_right') {
             return;
         }
 

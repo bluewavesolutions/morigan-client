@@ -23,6 +23,7 @@ export class OtherCharactersManager {
             }
 
             this.otherCharacters.push(new OtherCharacter(this.camera,
+                this.mediator,
                 this.animationManager,
                 data.Id,
                 data.Nick,
