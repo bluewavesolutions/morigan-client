@@ -57,8 +57,8 @@ export class OtherCharacter implements IRenderableComponent {
                     type: 'Tooltip::Show',
                     data: {
                         text: this.nick,
-                        x: this.realX + cameraRealX,
-                        y: this.realY + cameraRealY
+                        x: this.realX,
+                        y: this.realY
                     }
                 });
             } else {

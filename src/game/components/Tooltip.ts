@@ -1,6 +1,7 @@
 import { ITextObject } from "../core/renderer/interfaces/ITextObject";
 import { singleton } from "tsyringe";
 import { Mediator } from "../core/events/Mediator";
+import { Camera } from "./Camera";
 
 @singleton()
 export class Tooltip {
@@ -10,7 +11,8 @@ export class Tooltip {
     private positionY: 0;
 
     constructor(
-        private mediator: Mediator
+        private mediator: Mediator,
+        private camera: Camera
     ) {
         mediator.registerHandler('Tooltip::Show', (data:any) => {
             this.text = data.text;
@@ -32,10 +34,14 @@ export class Tooltip {
     }
 
     prepareRendererObject(): ITextObject {
+        const { cameraRealX, cameraRealY } = this.camera.getPosition();
+        const x = Math.floor(cameraRealX + this.positionX);
+        const y = Math.floor(cameraRealY + this.positionY);
+
         return {
             text: this.text,
-            x: this.positionX,
-            y: this.positionY
+            x: x,
+            y: y
         } as ITextObject;
     }
 }

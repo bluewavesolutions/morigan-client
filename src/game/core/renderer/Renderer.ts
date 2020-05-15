@@ -18,17 +18,30 @@ export class Renderer {
         private otherCharactersManager: OtherCharactersManager
     ) {
         this.canvas = document.getElementById('game') as HTMLCanvasElement;
-        this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+        this.context = this.canvas.getContext('2d', {alpha: false}) as CanvasRenderingContext2D;
 
         window.addEventListener('load', () => {
-            this.canvas.width = window.innerWidth - 5;
-            this.canvas.height = window.innerHeight - 5;
+            this.resizeCanvas();
         }, false);
 
         window.addEventListener('resize', () => {
-            this.canvas.width = window.innerWidth - 5;
-            this.canvas.height = window.innerHeight - 5;
+            this.resizeCanvas();
         }, false);
+    }
+
+    private resizeCanvas() {
+        this.canvas.width = window.innerWidth - 5;
+        this.canvas.height = window.innerHeight - 5;
+
+        let rect = this.canvas.getBoundingClientRect();
+
+        this.canvas.width = rect.width * window.devicePixelRatio;
+        this.canvas.height = rect.height * window.devicePixelRatio;
+
+        this.context.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+        this.canvas.style.width = `${rect.width}px`;
+        this.canvas.style.height = `${rect.height}px`;
     }
 
     public start() {
@@ -43,6 +56,7 @@ export class Renderer {
         const { context, otherCharactersManager } = this;
 
         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
         if (this.ground.isLoaded()) {
             const ground = this.ground.prepareRendererObject();
             context.drawImage(ground.image, ground.dx, ground.dy);
@@ -78,24 +92,24 @@ export class Renderer {
             const tooltip = this.tooltip.prepareRendererObject();
             context.save();
 
-            context.fillStyle = '#18521D';
-            context.fillRect(tooltip.x + 4, 
-                tooltip.y - 11, 
-                context.measureText(tooltip.text).width + 10, 
-                13);
+            context.fillStyle = '#73A942';
+            context.fillRect(tooltip.x + 6, 
+                tooltip.y - 12, 
+                context.measureText(tooltip.text).width + 26, 
+                14);
 
-            context.strokeStyle = '#ffff00';
-            context.strokeRect(tooltip.x + 4, 
-                tooltip.y - 11, 
-                context.measureText(tooltip.text).width + 10, 
-                13);
+            context.strokeStyle = '#1A4301';
+            context.lineWidth = 2;
+            context.strokeRect(tooltip.x + 6, 
+                tooltip.y - 12, 
+                context.measureText(tooltip.text).width + 26, 
+                14);
             
-            context.fillStyle = '#ffff00';
-            context.lineWidth = 0.5;
-            context.font = "12px Arial";
+            context.fillStyle = '#143601';
+            context.font = "8px pixelFont";
             context.fillText(tooltip.text, 
-                tooltip.x + 8, 
-                tooltip.y,
+                tooltip.x + 10, 
+                tooltip.y - 2,
                 context.measureText(tooltip.text).width);
             
             context.restore();
