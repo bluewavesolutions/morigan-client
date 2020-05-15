@@ -7,13 +7,13 @@ import { AnimationManager } from "../core/animations/AnimationManager";
 
 @singleton()
 export class Camera {
-    private positionX : number = 0;
+    private positionX: number = 0;
     private positionY: number = 0;
 
-    private realX : number = 0;
+    private realX: number = 0;
     private realY: number = 0;
 
-    public maxX : number = 0;
+    public maxX: number = 0;
     public maxY: number = 0;
 
     private character: Character;
@@ -47,7 +47,7 @@ export class Camera {
 
         if (direction === 'cam_down') {
             this.positionY -= 2;
-        } 
+        }
 
         if (direction === 'cam_right') {
             this.positionX -= 2;
@@ -92,7 +92,7 @@ export class Camera {
                 this.animationManager.updateAnimation(this, { positionX, positionY }, 1000.0);
             } else {
                 this.animationManager.updateAnimation(this, { positionX, positionY }, 2500.0);
-            }    
+            }
 
             return;
         }
@@ -126,7 +126,7 @@ export class Camera {
         if (positionX < this.maxX) {
             positionX = this.maxX;
         }
-        
+
         return {
             positionX,
             positionY
@@ -142,12 +142,12 @@ export class Camera {
         let offsetX = 0;
         let offsetY = 0;
 
-        if (window.innerWidth > this.ground.width*32) {
-            offsetX = (window.innerWidth - (this.ground.width*32)) / 2 / 32;
+        if (window.innerWidth > this.ground.width * 32) {
+            offsetX = (window.innerWidth - (this.ground.width * 32)) / 2 / 32;
         }
 
-        if (window.innerHeight > this.ground.height*32) {
-            offsetY = (window.innerHeight - (this.ground.height*32)) / 2 / 32;
+        if (window.innerHeight > this.ground.height * 32) {
+            offsetY = (window.innerHeight - (this.ground.height * 32)) / 2 / 32;
         }
 
         this.maxX = -this.ground.width + x - offsetX;

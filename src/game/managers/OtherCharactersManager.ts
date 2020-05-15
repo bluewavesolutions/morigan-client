@@ -18,26 +18,26 @@ export class OtherCharactersManager {
     ) {
         this.mediator.registerHandler('OtherCharactersManager::Load', (data: IOtherCharacterServerModel) => {
             let findIndex = this.otherCharacters.findIndex(e => e.id == data.Id);
-            if(findIndex >= 0) {
+            if (findIndex >= 0) {
                 return;
             }
 
             this.otherCharacters.push(new OtherCharacter(this.camera,
                 this.animationManager,
-                data.Id, 
-                data.Nick, 
+                data.Id,
+                data.Nick,
                 data.Outfit,
-                data.PositionX, 
+                data.PositionX,
                 data.PositionY));
         });
 
         this.mediator.registerHandler('OtherCharactersManager::Moved', (data: IOtherCharacterMovedResponse) => {
             let character = this.otherCharacters.find((e) => e.id == data.Id) as OtherCharacter;
-            character.move(data.PositionX, data.PositionY); 
+            character.move(data.PositionX, data.PositionY);
         });
     }
 
-    public prepareRendererObjects() : IRenderObject[] {
+    public prepareRendererObjects(): IRenderObject[] {
         return this.otherCharacters.map(e => e.prepareRendererObject());
     }
 }

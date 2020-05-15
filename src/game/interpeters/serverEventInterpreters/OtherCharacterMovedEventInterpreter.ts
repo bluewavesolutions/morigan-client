@@ -8,11 +8,11 @@ export class OtherCharacterMovedEventInterpreter implements IServerEventInterpre
     ) {
     }
 
-    public async execute(data: IOtherCharacterMovedResponse) : Promise<void> {
+    public async execute(data: IOtherCharacterMovedResponse): Promise<void> {
         console.log(data);
 
-        await this.mediator.publish({ 
-            type: 'OtherCharactersManager::Moved', 
+        await this.mediator.publish({
+            type: 'OtherCharactersManager::Moved',
             data: data
         });
     }

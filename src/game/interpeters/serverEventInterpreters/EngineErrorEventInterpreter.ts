@@ -4,5 +4,5 @@ import { IEngineErrorResponse } from "../../communication/interfaces/responses/I
 export class EngineErrorEventInterpreter implements IServerEventInterpreter<IEngineErrorResponse> {
     async execute(data: IEngineErrorResponse): Promise<void> {
         throw new Error(data.Message);
-    } 
+    }
 }

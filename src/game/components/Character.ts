@@ -26,9 +26,9 @@ export class Character implements IRenderableComponent {
     public positionX: number = 0;
     public positionY: number = 0;
 
-    private stepX : number = 0;
+    private stepX: number = 0;
     private stepY: number = 0;
-    
+
     public animationLock = false;
 
     private lastDirection: string = '';
@@ -67,8 +67,8 @@ export class Character implements IRenderableComponent {
     }
 
     public async move(direction: Direction) {
-        if (direction === null) { 
-            return; 
+        if (direction === null) {
+            return;
         }
 
         if (direction === 'cam_up' || direction === 'cam_down' || direction === 'cam_left' || direction == 'cam_right') {
@@ -95,7 +95,7 @@ export class Character implements IRenderableComponent {
         }
 
         this.stepX += 32;
-        if(this.stepX >= 32*4) {
+        if (this.stepX >= 32 * 4) {
             this.stepX = 0;
         }
 
@@ -107,7 +107,7 @@ export class Character implements IRenderableComponent {
 
         if (direction === 'up') {
             positionY--;
-        } 
+        }
         if (direction === 'down') {
             positionY++;
         }
@@ -165,11 +165,11 @@ export class Character implements IRenderableComponent {
         this.stepX = 0;
     }
 
-    public isLoaded() : boolean {
+    public isLoaded(): boolean {
         return typeof(this.image) !== typeof(undefined);
     }
 
-    public prepareRendererObject() : IRenderObject {
+    public prepareRendererObject(): IRenderObject {
         const characterWidth = 32;
         const characterHeight = 48;
 

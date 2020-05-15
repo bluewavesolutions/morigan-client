@@ -16,8 +16,8 @@ export class Server {
 
     public connect() {
         this.webSocket = new WebSocket("wss://game-alpha.morigan.pl/ws");
-        //http://localhost:8989/
-        //"wss://game-alpha.morigan.pl/ws"
+        // http://localhost:8989/
+        // "wss://game-alpha.morigan.pl/ws"
 
         this.mediator.registerHandler('Server::SendMessage', (data: IServerCommunicationFrame) => {
             this.webSocket?.send(JSON.stringify(data));

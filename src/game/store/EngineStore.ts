@@ -1,6 +1,6 @@
 import { singleton } from "tsyringe";
 
-var jwt = localStorage.getItem('jwt');
+let jwt = localStorage.getItem('jwt');
 if (jwt === null) {
     jwt = prompt("jwt") as string;
     localStorage.setItem('jwt', jwt);

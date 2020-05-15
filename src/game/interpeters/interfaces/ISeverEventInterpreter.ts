@@ -1,3 +1,3 @@
 export interface IServerEventInterpreter<T> {
-    execute(data: T) : Promise<void>;
+    execute(data: T): Promise<void>;
 }

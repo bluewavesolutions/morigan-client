@@ -17,17 +17,17 @@ export class OtherCharacter implements IRenderableComponent {
     public realY: number;
 
     private lastDirection: string;
-    private stepX : number = 0;
+    private stepX: number = 0;
     private stepY: number = 0;
 
     private animationLock: boolean = false;
 
-    constructor(camera: Camera, 
+    constructor(camera: Camera,
         animationManager: AnimationManager,
-        id: number, 
-        nick: string, 
-        outfit: string, 
-        positionX: number, 
+        id: number,
+        nick: string,
+        outfit: string,
+        positionX: number,
         positionY: number
     ) {
         this.camera = camera;
@@ -50,7 +50,7 @@ export class OtherCharacter implements IRenderableComponent {
             return;
         }
 
-        const direction = this.direction(x,y);
+        const direction = this.direction(x, y);
         switch (direction) {
             case 'up':
                 this.stepY = 48 * 3;
@@ -69,7 +69,7 @@ export class OtherCharacter implements IRenderableComponent {
         }
 
         this.stepX += 32;
-        if(this.stepX >= 32*4) {
+        if (this.stepX >= 32 * 4) {
             this.stepX = 0;
         }
 
@@ -91,11 +91,11 @@ export class OtherCharacter implements IRenderableComponent {
         this.animationLock = false;
     }
 
-    private direction(x:number, y:number) : Direction {
+    private direction(x: number, y: number): Direction {
         let deltaX = this.positionX - x;
         let deltaY = this.positionY - y;
 
-        if(deltaX > 0) {
+        if (deltaX > 0) {
             return 'left';
         } else if (deltaX < 0) {
             return 'right';
@@ -106,7 +106,7 @@ export class OtherCharacter implements IRenderableComponent {
         }
     }
 
-    public prepareRendererObject() : IRenderObject {
+    public prepareRendererObject(): IRenderObject {
         const characterWidth = 32;
         const characterHeight = 48;
 

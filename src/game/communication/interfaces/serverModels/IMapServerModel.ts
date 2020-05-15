@@ -1,5 +1,5 @@
 export interface IMapServerModel {
-    //Collisions: null
+    // Collisions: null
     Description: string;
     Height: number;
     HeightInPixels: number;

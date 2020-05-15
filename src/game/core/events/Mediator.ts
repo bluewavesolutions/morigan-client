@@ -6,13 +6,13 @@ export class Mediator {
     private handlers: Map<string, any[]> = new Map();
 
     public async publish(event: IGameEvent) {
-        if(this.handlers.has(event.type) === false) {
+        if (this.handlers.has(event.type) === false) {
             console.warn(`Unkwnon event type: ${event.type}`);
             console.warn(event);
             return Promise.reject();
         }
 
-        //console.log(`EngineMediator->${event.type}`);
+        // console.log(`EngineMediator->${event.type}`);
 
         let prom: Promise<void>[] = [];
 
@@ -27,7 +27,7 @@ export class Mediator {
     }
 
     public registerHandler(type: string, func: any) {
-        if(this.handlers.has(type) === false) {
+        if (this.handlers.has(type) === false) {
             this.handlers.set(type, []);
         }
 
