@@ -8,11 +8,11 @@ export class OtherCharacterLoadedEventInterpreter implements IServerEventInterpr
     ) {
     }
 
-    public async execute(data: IOtherCharacterLoadedResponse) : Promise<void> {
+    public async execute(data: IOtherCharacterLoadedResponse): Promise<void> {
         console.log(data);
 
-        await this.mediator.publish({ 
-            type: 'OtherCharactersManager::Load', 
+        await this.mediator.publish({
+            type: 'OtherCharactersManager::Load',
             data: data
         });
     }

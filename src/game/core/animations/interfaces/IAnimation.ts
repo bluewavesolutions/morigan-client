@@ -8,7 +8,7 @@ export interface IAnimation {
     lastUpdate: number;
     start: number;
     animationDelta: IAnimationDelta;
-    finishResult: { 
-        [key: string]: number 
+    finishResult: {
+        [key: string]: number
     };
 }

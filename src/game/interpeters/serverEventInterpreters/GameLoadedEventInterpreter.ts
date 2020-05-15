@@ -5,27 +5,27 @@ import { EngineStore } from "../../store/EngineStore";
 
 export class GameLoadedEventInterpreter implements IServerEventInterpreter<IGameLoadedResponse> {
     constructor(
-        private mediator: Mediator, 
+        private mediator: Mediator,
         private engineStore: EngineStore
     ) {
     }
 
-    public async execute(data: IGameLoadedResponse) : Promise<void> {
+    public async execute(data: IGameLoadedResponse): Promise<void> {
         console.log(data);
 
-        await this.mediator.publish({ 
-            type: 'Character::Load', 
+        await this.mediator.publish({
+            type: 'Character::Load',
             data: data.Character
         });
 
-        await this.mediator.publish({ 
-            type: 'Ground::Load', 
+        await this.mediator.publish({
+            type: 'Ground::Load',
             data: data.Map
         });
 
         for (let index in data.OtherCharacters) {
-            await this.mediator.publish({ 
-                type: 'OtherCharactersManager::Load', 
+            await this.mediator.publish({
+                type: 'OtherCharactersManager::Load',
                 data: data.OtherCharacters[index]
             });
         }

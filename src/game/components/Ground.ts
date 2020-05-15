@@ -44,11 +44,11 @@ export class Ground {
         });
     }
 
-    public isLoaded() : boolean {
+    public isLoaded(): boolean {
         return typeof(this.image) !== typeof(undefined);
     }
 
-    public prepareRendererObject() : IMapObject {
+    public prepareRendererObject(): IMapObject {
         const { cameraRealX, cameraRealY } = this.camera.getPosition();
         const x = cameraRealX + this.realX;
         const y = cameraRealY + this.realY;

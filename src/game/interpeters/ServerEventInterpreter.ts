@@ -21,7 +21,7 @@ export class ServerEventInterpreter {
 
     private async execute(serverCommunicationFrame: IServerCommunicationFrame) {
         let serverEventInterpreter: IServerEventInterpreter<any> | undefined;
-        
+
         switch (serverCommunicationFrame.Type) {
             case 'GAME_LOADED' : {
                 serverEventInterpreter = new GameLoadedEventInterpreter(this.mediator, this.engineStore);

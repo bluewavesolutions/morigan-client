@@ -26,10 +26,10 @@ export class KeyboardListener {
     private handleKeyDownEvent = (event: KeyboardEvent) => {
         const { code } = event;
 
-        if (DIRECTION_KEY_CODES.hasOwnProperty(code) == false) { 
+        if (DIRECTION_KEY_CODES.hasOwnProperty(code) == false) {
             return;
         }
-    
+
         const keyDirection = DIRECTION_KEY_CODES[code];
 
         this.mediator.publish({
@@ -39,7 +39,7 @@ export class KeyboardListener {
 
         this.currentDirection = keyDirection;
     }
-    
+
     private handleKeyUpEvent = (event: KeyboardEvent) => {
         const { code } = event;
         if (DIRECTION_KEY_CODES.hasOwnProperty(code) === false) {
