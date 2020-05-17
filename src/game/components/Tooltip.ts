@@ -16,16 +16,19 @@ export class Tooltip {
     ) {
         mediator.registerHandler('Tooltip::Show', (data:any) => {
             this.text = data.text;
-            this.positionX = data.x;
-            this.positionY = data.y;
             this.visible = true;
         });
 
         mediator.registerHandler('Tooltip::Hide', (data:any) => {
             this.visible = false;
             this.text = "";
-            this.positionX = 0;
-            this.positionY = 0;
+        });
+
+        mediator.registerHandler('MouseManager::MouseMove', (data:any) => {
+            const { clientX, clientY } = data;
+
+            this.positionX = clientX;
+            this.positionY = clientY;
         });
     }
 
@@ -34,14 +37,10 @@ export class Tooltip {
     }
 
     prepareRendererObject(): ITextObject {
-        const { cameraRealX, cameraRealY } = this.camera.getPosition();
-        const x = Math.floor(cameraRealX + this.positionX);
-        const y = Math.floor(cameraRealY + this.positionY);
-
         return {
             text: this.text,
-            x: x,
-            y: y
+            x: this.positionX + 10,
+            y: this.positionY + 10
         } as ITextObject;
     }
 }
