@@ -1,12 +1,10 @@
 import { Ground } from "../../components/Ground";
 import { OtherCharactersManager } from "../../managers/OtherCharactersManager";
-import { injectable } from "tsyringe";
 import { Character } from "../../components/Character";
 import { AnimationManager } from "../animations/AnimationManager";
 import { Tooltip } from "../../components/Tooltip";
 import { GameWindow } from "./GameWindow";
 
-@injectable()
 export class Renderer {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;

@@ -1,15 +1,13 @@
-import { singleton } from "tsyringe";
 import { IAnimationDelta } from "./interfaces/IAnimationDelta";
 import { IAnimation } from "./interfaces/IAnimation";
 
-@singleton()
 export class AnimationManager {
     private currentAnimations: IAnimation[] = [];
 
     public animateTo = (target: any,
         params: { [key: string]: number },
         duration: number,
-        onUpdate?: (percentageFinished?: number) => void
+        onUpdate: (percentageFinished?: number) => void
     ): Promise<void> => {
         const animationDelta = {};
 
@@ -27,14 +25,14 @@ export class AnimationManager {
     public animate = (target: any,
         animationDelta: IAnimationDelta,
         duration: number,
-        onUpdate?: (percentageFinished?: number) => void
+        onUpdate: (percentageFinished?: number) => void
     ): Promise<void> => {
         return new Promise(resolve => {
             const finishResult = this.generateFinishResult(target, animationDelta);
 
             const animation: IAnimation = {
                 target, duration, animationDelta, finishResult,
-                onUpdate: onUpdate || null,
+                onUpdate: onUpdate,
                 lastUpdate: performance.now(),
                 start: performance.now(),
                 handler: () => {

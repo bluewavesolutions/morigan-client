@@ -1,14 +1,12 @@
 import { ITextObject } from "../core/renderer/interfaces/ITextObject";
-import { singleton } from "tsyringe";
 import { Mediator } from "../core/events/Mediator";
 import { Camera } from "./Camera";
 
-@singleton()
 export class Tooltip {
     private visible: boolean = false;
     private text = "";
-    private positionX: 0;
-    private positionY: 0;
+    private positionX: number = 0;
+    private positionY: number = 0;
 
     constructor(
         private mediator: Mediator,

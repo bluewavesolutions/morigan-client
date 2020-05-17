@@ -1,10 +1,8 @@
 import { Mediator } from "../core/events/Mediator";
 import { IMapObject } from "../core/renderer/interfaces/IMapObject";
 import { IMapServerModel } from "../communication/interfaces/serverModels/IMapServerModel";
-import { singleton } from "tsyringe";
 import { Camera } from "./Camera";
 
-@singleton()
 export class Ground {
     private image: HTMLImageElement | undefined;
 

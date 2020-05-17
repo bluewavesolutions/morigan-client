@@ -1,9 +1,11 @@
-import { singleton } from "tsyringe";
-
-@singleton()
 export class GameWindow {
     public dimensions() {
-        const rect = document.getElementById('game_window').getBoundingClientRect();
+        const gameWindow = document.getElementById('game_window');
+        if(gameWindow === null) {
+            throw new Error('Game window element not found');
+        }
+
+        const rect = gameWindow.getBoundingClientRect();
 
         return { 
             width: rect.width, 

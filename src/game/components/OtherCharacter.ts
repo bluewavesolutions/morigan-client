@@ -17,7 +17,7 @@ export class OtherCharacter implements IRenderableComponent {
     public realX: number;
     public realY: number;
 
-    private lastDirection: string;
+    private lastDirection: string = 'down';
     private stepX: number = 0;
     private stepY: number = 0;
 
@@ -129,6 +129,8 @@ export class OtherCharacter implements IRenderableComponent {
         } else if (deltaY < 0) {
             return 'down';
         }
+
+        return 'down';
     }
 
     public prepareRendererObject(): IRenderObject {

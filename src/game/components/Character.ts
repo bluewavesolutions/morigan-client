@@ -1,14 +1,12 @@
 import { Mediator } from "../core/events/Mediator";
 import { EngineStore } from "../store/EngineStore";
 import { ICharacterServerModel } from "../communication/interfaces/serverModels/ICharacterServerModel";
-import { singleton } from "tsyringe";
 import { Camera } from "./Camera";
 import { Direction } from "../managers/KeyboardManager";
 import { IRenderObject } from "../core/renderer/interfaces/IRenderObject";
 import { AnimationManager } from "../core/animations/AnimationManager";
 import { IRenderableComponent } from "../core/renderer/interfaces/IRenderableComponent";
 
-@singleton()
 export class Character implements IRenderableComponent {
     private id: number = 0;
 

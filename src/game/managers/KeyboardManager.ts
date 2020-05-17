@@ -1,5 +1,4 @@
 import { Mediator } from "../core/events/Mediator";
-import { singleton } from "tsyringe";
 
 export type Direction = 'up' | 'down' | 'left' | 'right' | 'cam_down' | 'cam_right' | 'cam_left'  | 'cam_up' | null;
 
@@ -14,7 +13,6 @@ const DIRECTION_KEY_CODES: { [keyCode: string]: Direction } = {
   'Digit4': 'cam_left'
 };
 
-@singleton()
 export class KeyboardManager {
     private currentDirection: Direction = null;
 
@@ -26,7 +24,7 @@ export class KeyboardManager {
     private handleKeyDownEvent = (event: KeyboardEvent) => {
         const { code } = event;
 
-        if (DIRECTION_KEY_CODES.hasOwnProperty(code) == false) {
+        if (DIRECTION_KEY_CODES.hasOwnProperty(code) === false) {
             return;
         }
 

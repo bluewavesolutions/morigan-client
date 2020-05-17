@@ -1,0 +1,15 @@
+* {
+  padding : 0;
+  margin: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+}
+
+@font-face {
+  font-family: 'pixelFont';
+  src: url('/pixeled2.ttf') format('truetype');
+}

@@ -3,44 +3,46 @@
   "author": "Patryk Pasek",
   "deprecated": false,
   "description": "Morigan MMORPG 2D Game Client",
-  "devDependencies": {
-    "awesome-typescript-loader": "^5.2.0",
-    "cross-env": "^5.0.1",
-    "ejs-loader": "^0.3.0",
-    "eslint": "^5.4.0",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "istanbul-instrumenter-loader": "^3.0.0",
-    "rimraf": "^2.6.1",
-    "source-map-loader": "^0.2.1",
-    "style-loader": "^1.2.1",
-    "tslint": "^5.5.0",
-    "tslint-loader": "^3.5.3",
-    "typescript": "^3.0.1",
-    "webpack": "^4.17.0",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5"
-  },
-  "directories": {
-    "test": "tests"
-  },
-  "license": "MIT",
-  "main": "src/index.ts",
-  "scripts": {
-    "build": "npm run build:prod",
-    "build:dev": "webpack --mode development --config ./webpack.config.js --progress --color --display-error-details",
-    "build:prod": "cross-env NODE_ENV=production webpack --mode production --config ./webpack.config.js  --progress  --color --display-error-details --bail",
-    "clean": "npm cache clear && rimraf -- dist",
-    "server": "npm run server:dev",
-    "server:dev": "webpack-dev-server --mode development --config ./webpack.config.js --hot --inline --progress --watch --open",
-    "server:prod": "cross-env NODE_ENV=production webpack-dev-server  --mode production --config ./webpack.config.js --port 3000 --host 0.0.0.0 --hot --inline --progress  --watch --open --content-base dist/",
-    "start": "npm run server:dev",
-    "test": "karma start"
-  },
   "version": "0.0.1",
+  "license": "MIT",
   "dependencies": {
-    "css-loader": "^3.5.3",
-    "reflect-metadata": "^0.1.13",
-    "tsyringe": "^4.1.0"
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-redux": "^7.1.8",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "rsdi": "^1.0.5",
+    "typescript": "~3.7.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

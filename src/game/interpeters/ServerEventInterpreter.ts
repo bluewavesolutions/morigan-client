@@ -6,9 +6,7 @@ import { GameLoadedEventInterpreter } from "./serverEventInterpreters/GameLoaded
 import { EngineErrorEventInterpreter } from "./serverEventInterpreters/EngineErrorEventInterpreter";
 import { OtherCharacterLoadedEventInterpreter } from "./serverEventInterpreters/OtherCharacterLoadedEventInterpreter";
 import { OtherCharacterMovedEventInterpreter } from "./serverEventInterpreters/OtherCharacterMovedEventInterpreter";
-import { singleton } from "tsyringe";
 
-@singleton()
 export class ServerEventInterpreter {
     constructor(
         private mediator: Mediator,

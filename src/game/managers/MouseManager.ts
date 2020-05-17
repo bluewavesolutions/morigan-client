@@ -1,7 +1,5 @@
-import { singleton } from "tsyringe";
 import { Mediator } from "../core/events/Mediator";
 
-@singleton()
 export class MouseManager {
     constructor(
         private mediator: Mediator

@@ -2,9 +2,7 @@ import { Mediator } from "../core/events/Mediator";
 import { EngineStore } from "../store/EngineStore";
 import { IServerCommunicationFrame } from "./interfaces/IServerCommunicationFrame";
 import { ILoadGameRequest } from './interfaces/requests/ILoadGameRequest';
-import { singleton } from "tsyringe";
 
-@singleton()
 export class Server {
     private webSocket: WebSocket | undefined;
 

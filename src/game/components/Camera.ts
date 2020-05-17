@@ -1,4 +1,3 @@
-import { singleton } from "tsyringe";
 import { Mediator } from "../core/events/Mediator";
 import { Character } from "./Character";
 import { Ground } from "./Ground";
@@ -6,7 +5,6 @@ import { Direction } from "../managers/KeyboardManager";
 import { AnimationManager } from "../core/animations/AnimationManager";
 import { GameWindow } from "../core/renderer/GameWindow";
 
-@singleton()
 export class Camera {
     private positionX: number = 0;
     private positionY: number = 0;
@@ -17,10 +15,10 @@ export class Camera {
     public maxX: number = 0;
     public maxY: number = 0;
 
-    private character: Character;
-    private ground: Ground;
-
     public animationLock: boolean = false;
+
+    private character: Character | undefined;
+    private ground: Ground | undefined;
 
     constructor(
         private mediator: Mediator,
@@ -68,7 +66,7 @@ export class Camera {
 
         this.animationLock = true;
 
-        await this.animationManager.animateTo(this, { realX, realY }, 1000.0 / 6.5);
+        await this.animationManager.animateTo(this, { realX, realY }, 1000.0 / 6.5, () => {});
 
         this.animationLock = false;
     }
