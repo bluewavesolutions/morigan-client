@@ -1,13 +1,6 @@
-#bottom_panel { 
-  grid-area: bottom_panel; 
-  background-image: url('/paper_panel.png'); 
-  background-position: center top;
-  background-size: 100% 100%;
-}
-
-#game_window { 
-  grid-area: game_window; 
-  overflow: hidden; 
+main {
+  width: 100%;
+  height: 100%;
 }
 
 #grid_layout {

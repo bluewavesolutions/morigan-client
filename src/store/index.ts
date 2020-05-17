@@ -1,8 +1,8 @@
 import { combineReducers } from "redux"
-import { layoutReducer } from "../layout/reducer"
+import { gameReducer } from "../game/reducer";
 
 export const rootReducer = combineReducers({
-    layout: layoutReducer
+    game: gameReducer
 });
   
 export type RootState = ReturnType<typeof rootReducer>

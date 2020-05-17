@@ -6,9 +6,31 @@ import { MouseManager } from './game/managers/MouseManager';
 import { Server } from './game/communication/Server';
 import { Renderer } from './game/core/renderer/Renderer';
 import { Container } from './container';
+import { GameState } from './game/types';
+import { connect, ConnectedProps } from 'react-redux';
+import { groundLoaded, characterLoaded, serverStatusChanged } from './game/actions';
+import BottomPanel from './components/bottomPanel/BottomPanel';
+import GameWindow from './game/GameWindow';
+import LoadingModal from './components/loadingModal/LoadingModal';
 import './App.css';
 
-class App extends Component {
+const mapState = (state: {game: GameState}) => ({
+  characterLoaded: state.game.characterLoaded,
+  groundLoaded: state.game.groundLoaded,
+  serverConnectionStatus: state.game.serverConnectionStatus
+})
+
+const mapDispatch = {
+  GroundLoaded: groundLoaded,
+  CharacterLoaded: characterLoaded, 
+  ServerStatusChanged: serverStatusChanged
+}
+
+const connector = connect(mapState, mapDispatch)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+class App extends Component<PropsFromRedux> {
 
   container = new Container().getContainer();
 
@@ -19,19 +41,19 @@ class App extends Component {
 
     const mediator = this.container.get<Mediator>("Mediator");
     mediator.registerHandler('Server::OnSocketClose', () => {
-      //TODO: Connection problem
+      this.props.ServerStatusChanged('loading');
     });
 
     mediator.registerHandler('Server::OnSocketOpen', () => {
-        //TODO: socket open
+      this.props.ServerStatusChanged('connected');
     });
 
     mediator.registerHandler('Character::Loaded', () => {
-        //TODO: character loaded
+      this.props.CharacterLoaded();
     });
 
     mediator.registerHandler('Ground::Loaded', () => {
-        //TODO: groud loaded
+      this.props.GroundLoaded();
     });
 
     const renderer = this.container.get<Renderer>("Renderer");
@@ -43,16 +65,20 @@ class App extends Component {
 
   render() {
     return (
-      <main id="grid_layout">
-        <div id="game_window">
-          <canvas id="game"></canvas>
-        </div>
-        <div id="bottom_panel">
-          Panel
+      <main>
+        {this.isLoaded() === false ? <LoadingModal /> : null}
+        <div id="grid_layout">
+          <GameWindow />
+          <BottomPanel />
         </div>
       </main>
     );
   }
+
+  isLoaded = () => {
+    const { groundLoaded, characterLoaded, serverConnectionStatus } = this.props;
+    return groundLoaded && characterLoaded && serverConnectionStatus === 'connected';
+  }
 }
 
-export default App;
+export default connector(App);
