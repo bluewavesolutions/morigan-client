@@ -1,0 +1,6 @@
+#top_panel { 
+    grid-area: top_panel; 
+    background-image: url('/paper_panel.png'); 
+    background-position: center top;
+    background-size: 100% 100%;
+}

@@ -6,6 +6,7 @@ import { GameLoadedEventInterpreter } from "./serverEventInterpreters/GameLoaded
 import { EngineErrorEventInterpreter } from "./serverEventInterpreters/EngineErrorEventInterpreter";
 import { OtherCharacterLoadedEventInterpreter } from "./serverEventInterpreters/OtherCharacterLoadedEventInterpreter";
 import { OtherCharacterMovedEventInterpreter } from "./serverEventInterpreters/OtherCharacterMovedEventInterpreter";
+import { ChatMessageEventInterpreter } from "./serverEventInterpreters/ChatMessageEventInterpreter";
 
 export class ServerEventInterpreter {
     constructor(
@@ -31,6 +32,10 @@ export class ServerEventInterpreter {
             }
             case 'OTHER_CHARACTER_MOVED' : {
                 serverEventInterpreter = new OtherCharacterMovedEventInterpreter(this.mediator);
+                break;
+            }
+            case 'CHAT_MESSAGE' : {
+                serverEventInterpreter = new ChatMessageEventInterpreter(this.mediator);
                 break;
             }
             case 'ENGINE_ERROR' : {
