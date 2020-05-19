@@ -4,7 +4,7 @@ export class Mediator {
     private handlers: Map<string, any[]> = new Map();
     private dispatch: any;
 
-    public async publish(event: IGameEvent) {
+    public async publish(event: IGameEvent, options?: { useReduxDispatch: boolean }) {
         let prom: Promise<void>[] = [];
 
         let handlers = this.handlers.get(event.type) as any[];
@@ -16,7 +16,7 @@ export class Mediator {
             }
         }
 
-        if (this.dispatch !== null) {
+        if (this.dispatch !== null && options?.useReduxDispatch === true) {
             this.dispatch(event);
         }
 

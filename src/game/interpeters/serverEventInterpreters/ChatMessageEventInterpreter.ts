@@ -12,6 +12,6 @@ export class ChatMessageEventInterpreter implements IServerEventInterpreter<ICha
         this.mediator.publish({
             type: 'Chat::MessageReceived',
             data: data
-        });
+        }, { useReduxDispatch: true });
     }
 }

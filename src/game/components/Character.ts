@@ -53,7 +53,7 @@ export class Character implements IRenderableComponent {
             this.mediator.publish({
                 type: 'Character::Loaded',
                 data: {}
-            });
+            }, { useReduxDispatch: true });
         });
 
         this.mediator.registerHandler('Character::ChangedDirection', async (direction: Direction) => {
