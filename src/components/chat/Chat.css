@@ -6,4 +6,6 @@
 #chat_messages {
     height: 50%;
     width: 100%;
+    word-wrap: break-word;
+    overflow-y: scroll;
 }

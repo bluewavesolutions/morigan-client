@@ -1,7 +1,7 @@
 import React, { Component, ChangeEvent } from 'react';
 import { ChatState } from './types';
 import { connect, ConnectedProps } from 'react-redux';
-import { updateChatMessage, sendChatMessage } from './actions';
+import { updateChatMessage, sendChatMessage, changeKeyboardManagerStatus } from './actions';
 import './Chat.css';
 
 const mapState = (state: {chat: ChatState}) => ({
@@ -11,7 +11,8 @@ const mapState = (state: {chat: ChatState}) => ({
   
 const mapDispatch = {
     UpdateChatMessage: updateChatMessage,
-    SendChatMessage: sendChatMessage
+    SendChatMessage: sendChatMessage,
+    ChangeKeyboardManagerStatus: changeKeyboardManagerStatus
 }
   
 const connector = connect(mapState, mapDispatch)
@@ -23,22 +24,24 @@ class Chat extends Component<PropsFromRedux> {
         return (
             <div id="chat">
                 <div id="chat_messages">
-                    {this.props.messages.map(message => (
+                    {this.props.messages.map(e => (
                         <div className="chat_message">
-                            {JSON.stringify(message)}
+                            <small>[{e.Time}]</small> {e.Nick}: {e.Message}
                         </div>
                     ))}
                 </div>
-                <input type="text" onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    this.props.UpdateChatMessage(event.target.value);
-                }} />
+                <input type="text"
+                    value={this.props.chatMessage}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => this.props.UpdateChatMessage(event.target.value)}
+                    onFocus={() => this.props.ChangeKeyboardManagerStatus('locked')}
+                    onBlur={() => this.props.ChangeKeyboardManagerStatus('unlocked')} />
                 <button onClick={async () => {
                     this.props.SendChatMessage({
-                        sessionToken: '',
-                        message: this.props.chatMessage,
-                        messageTo: '',
-                        messageType: 'GLOBAL',
+                        message: this.props.chatMessage
                     });
+
+                    const element = document.getElementById("chat_messages");
+                    element.scrollTop = element.scrollHeight;
                 }}>
                     Send
                 </button>

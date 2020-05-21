@@ -2,7 +2,8 @@ import {
     ChatState, 
     ChatActionTypes, 
     CHAT_MESSAGE_RECEIVED, 
-    CHAT_MESSAGE_CHANGED
+    CHAT_MESSAGE_CHANGED,
+    SEND_CHAT_MESSAGE
 } from "./types";
 import update from 'immutability-helper';
 
@@ -20,6 +21,8 @@ export function chatReducer(
             return { ...state, messages: update(state.messages, { $push: [action.data] }) }
         case CHAT_MESSAGE_CHANGED:        
             return { ...state, chatMessage: action.payload }
+        case SEND_CHAT_MESSAGE:
+            return { ...state, chatMessage: '' }
         default:
             return state
     }

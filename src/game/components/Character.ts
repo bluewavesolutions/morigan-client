@@ -52,7 +52,9 @@ export class Character implements IRenderableComponent {
 
             this.mediator.publish({
                 type: 'Character::Loaded',
-                data: {}
+                data: {
+                    nick: characterServerModel.Nick
+                }
             }, { useReduxDispatch: true });
         });
 

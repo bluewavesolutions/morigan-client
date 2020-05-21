@@ -18,7 +18,8 @@ const initialState: GameState = {
     engineStatus: 'loading',
     groundLoaded: false,
     characterLoaded: false,
-    serverConnectionStatus: 'loading'
+    serverConnectionStatus: 'loading',
+    nick: ''
 }
 
 export function gameReducer(
@@ -27,7 +28,7 @@ export function gameReducer(
   ): GameState {
     switch (action.type) {
         case CHARACTER_LOADED:
-            return { ...state, characterLoaded: true }
+            return { ...state, characterLoaded: true, nick: action.data.nick }
         case GROUD_LOADED:
             return { ...state, groundLoaded: true }
         case CREDENTIALS_LOADED:

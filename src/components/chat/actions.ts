@@ -1,8 +1,7 @@
-import { ChatActionTypes, CHAT_MESSAGE_CHANGED, SEND_CHAT_MESSAGE } from "./types";
+import { ChatActionTypes, CHAT_MESSAGE_CHANGED, SEND_CHAT_MESSAGE, KEYBOARD_STATUS_CHANGE } from "./types";
 import { IDIContainer } from "rsdi";
 import { Mediator } from "../../game/core/events/Mediator";
 import { EngineStore } from "../../game/store/EngineStore";
-import { IChatMessageRequest } from "../../game/communication/interfaces/requests/IChatMessageRequest";
 
 export function updateChatMessage(value: string): ChatActionTypes {
     return {
@@ -11,26 +10,43 @@ export function updateChatMessage(value: string): ChatActionTypes {
     }
 }
 
-export function sendChatMessage(chatMessage: IChatMessageRequest): ChatActionTypes {
+export function sendChatMessage(chatMessage: {message: string}): ChatActionTypes {
     const container = (window as any).container as IDIContainer;
     const mediator = container.get<Mediator>("Mediator");
     const engineStore = container.get<EngineStore>("EngineStore");
+
+    const message = {
+        sessionToken: engineStore.session,
+        messageTo: '',
+        messageType: 'GLOBAL',
+        message: chatMessage.message
+    };
 
     mediator.publish({
         type: 'Server::SendMessage',
         data: {
             type: 'SEND_CHAT_MESSAGE',
-            data: {
-                sessionToken: engineStore.session,
-                messageTo: chatMessage.messageTo,
-                messageType: chatMessage.messageType,
-                message: chatMessage.message
-            }
+            data: message
         }
     });
 
     return {
         type: SEND_CHAT_MESSAGE,
-        payload: chatMessage
+        payload: message
+    }
+}
+
+export function changeKeyboardManagerStatus(status: 'locked' | 'unlocked') {
+    const container = (window as any).container as IDIContainer;
+    const mediator = container.get<Mediator>("Mediator");
+
+    mediator.publish({
+        type: 'KeyboardManager::ChangeStatus',
+        data: status
+    });
+
+    return {
+        type: KEYBOARD_STATUS_CHANGE,
+        payload: status
     }
 }

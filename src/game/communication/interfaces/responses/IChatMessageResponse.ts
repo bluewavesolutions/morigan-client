@@ -1,6 +1,6 @@
 export interface IChatMessageResponse {
-    nick: string,
-    time: string,
-    messageType: string,
-    message: string
+    Nick: string,
+    Time: string,
+    MessageType: string,
+    Message: string
 }

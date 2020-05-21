@@ -18,7 +18,8 @@ export interface GameState {
     engineStatus: EngineStatus,
     groundLoaded: boolean,
     characterLoaded: boolean,
-    serverConnectionStatus: ConnectionStatus
+    serverConnectionStatus: ConnectionStatus,
+    nick: string
 }
 
 interface GroundLoadedAction {
@@ -28,7 +29,9 @@ interface GroundLoadedAction {
 
 interface CharacterLoadedAction {
     type: typeof CHARACTER_LOADED
-    payload: {}
+    data: {
+        nick: string
+    }
 }
 
 interface ServerStatusChangeAction {

@@ -4,6 +4,7 @@ import { IChatMessageRequest } from "../../game/communication/interfaces/request
 export const CHAT_MESSAGE_RECEIVED = 'Chat::MessageReceived';
 export const CHAT_MESSAGE_CHANGED = 'CHAT_MESSAGE_CHANGED';
 export const SEND_CHAT_MESSAGE = 'SEND_CHAT_MESSAGE';
+export const KEYBOARD_STATUS_CHANGE = 'KEYBOARD_STATUS_CHANGE';
 
 export interface ChatState {
     messages: IChatMessageResponse[],
@@ -25,6 +26,12 @@ interface SendChatMessage {
     payload: IChatMessageRequest
 }
 
+interface KeyboardStatusChanged {
+    type: typeof KEYBOARD_STATUS_CHANGE
+    payload: {}
+}
+
 export type ChatActionTypes = ChatMessageReceived 
     | ChatMessageChanged 
     | SendChatMessage
+    | KeyboardStatusChanged
