@@ -11,8 +11,6 @@ export class GameLoadedEventInterpreter implements IServerEventInterpreter<IGame
     }
 
     public async execute(data: IGameLoadedResponse): Promise<void> {
-        console.log(data);
-
         await this.mediator.publish({
             type: 'Character::Load',
             data: data.Character

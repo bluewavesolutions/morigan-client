@@ -8,8 +8,9 @@ main {
   height: 100%;
   display: grid;
   grid-template-areas:
-    'game_window game_window'
-    'bottom_panel bottom_panel';
-  grid-template-rows: auto 76px;
-  grid-template-columns: auto auto;
+    'top_panel top_panel top_panel'
+    'left_panel game_window game_window'
+    'bottom_panel bottom_panel bottom_panel';
+  grid-template-rows: 48px auto 48px;
+  grid-template-columns: 256px auto auto;
 }

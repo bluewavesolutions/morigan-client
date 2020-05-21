@@ -15,13 +15,22 @@ const DIRECTION_KEY_CODES: { [keyCode: string]: Direction } = {
 
 export class KeyboardManager {
     private currentDirection: Direction = null;
+    private status: 'locked' | 'unlocked';
 
     constructor(private mediator: Mediator) {
         window.addEventListener('keydown', this.handleKeyDownEvent, false);
         window.addEventListener('keyup', this.handleKeyUpEvent, false);
+
+        this.mediator.registerHandler('KeyboardManager::ChangeStatus', (data: 'locked' | 'unlocked') => {
+            this.status = data;
+        });
     }
 
     private handleKeyDownEvent = (event: KeyboardEvent) => {
+        if(this.status === 'locked') {
+            return;
+        }
+
         const { code } = event;
 
         if (DIRECTION_KEY_CODES.hasOwnProperty(code) === false) {
@@ -39,6 +48,10 @@ export class KeyboardManager {
     }
 
     private handleKeyUpEvent = (event: KeyboardEvent) => {
+        if(this.status === 'locked') {
+            return;
+        }
+
         const { code } = event;
         if (DIRECTION_KEY_CODES.hasOwnProperty(code) === false) {
             return;

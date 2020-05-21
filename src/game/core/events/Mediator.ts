@@ -2,23 +2,22 @@ import { IGameEvent } from "./interfaces/IGameEvent";
 
 export class Mediator {
     private handlers: Map<string, any[]> = new Map();
+    private dispatch: any;
 
-    public async publish(event: IGameEvent) {
-        if (this.handlers.has(event.type) === false) {
-            console.warn(`Unkwnon event type: ${event.type}`);
-            console.warn(event);
-            return Promise.reject();
-        }
-
-        // console.log(`EngineMediator->${event.type}`);
-
+    public async publish(event: IGameEvent, options?: { useReduxDispatch: boolean }) {
         let prom: Promise<void>[] = [];
 
         let handlers = this.handlers.get(event.type) as any[];
-        for (let handler of handlers) {
-            prom.push(new Promise((resolve) => {
-                resolve(handler(event.data));
-            }));
+        if (typeof(handlers) !== typeof(undefined)) {
+            for (let handler of handlers) {
+                prom.push(new Promise((resolve) => {
+                    resolve(handler(event.data));
+                }));
+            }
+        }
+
+        if (this.dispatch !== null && options?.useReduxDispatch === true) {
+            this.dispatch(event);
         }
 
         return await Promise.all(prom);
@@ -29,6 +28,12 @@ export class Mediator {
             this.handlers.set(type, []);
         }
 
+        console.log(`EngineMediator->registerHandler->${type}`);
+
         this.handlers.get(type)?.push(func);
+    }
+
+    public registerRedux(dispatch: any) {
+        this.dispatch = dispatch;
     }
 }

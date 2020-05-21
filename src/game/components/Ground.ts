@@ -38,7 +38,7 @@ export class Ground {
             this.mediator.publish({
                 type: 'Ground::Loaded',
                 data: {}
-            });
+            }, { useReduxDispatch: true });
         });
     }
 

@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-import { Mediator } from './game/core/events/Mediator';
-import { ServerEventInterpreter } from './game/interpeters/ServerEventInterpreter';
-import { KeyboardManager } from './game/managers/KeyboardManager';
-import { MouseManager } from './game/managers/MouseManager';
-import { Server } from './game/communication/Server';
-import { Renderer } from './game/core/renderer/Renderer';
-import { Container } from './container';
 import { GameState } from './game/types';
 import { connect, ConnectedProps } from 'react-redux';
-import { groundLoaded, characterLoaded, serverStatusChanged } from './game/actions';
+import { thunkStartEngine } from './game/actions';
 import BottomPanel from './components/bottomPanel/BottomPanel';
 import GameWindow from './game/GameWindow';
 import LoadingModal from './components/loadingModal/LoadingModal';
+import TopPanel from './components/topPanel/TopPanel';
+import LeftPanel from './components/leftPanel/LeftPanel';
+import Characters from './components/characters/Characters';
 import './App.css';
 
 const mapState = (state: {game: GameState}) => ({
@@ -21,9 +17,7 @@ const mapState = (state: {game: GameState}) => ({
 })
 
 const mapDispatch = {
-  GroundLoaded: groundLoaded,
-  CharacterLoaded: characterLoaded, 
-  ServerStatusChanged: serverStatusChanged
+  ThunkStartEngine: thunkStartEngine,
 }
 
 const connector = connect(mapState, mapDispatch)
@@ -32,42 +26,25 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 class App extends Component<PropsFromRedux> {
 
-  container = new Container().getContainer();
-
   componentDidMount() {
-    this.container.get<ServerEventInterpreter>("ServerEventInterpreter");
-    this.container.get<MouseManager>("MouseManager");
-    this.container.get<KeyboardManager>("KeyboardManager");
+    const jwt = localStorage.getItem('jwt');
+    const character = localStorage.getItem('character');
 
-    const mediator = this.container.get<Mediator>("Mediator");
-    mediator.registerHandler('Server::OnSocketClose', () => {
-      this.props.ServerStatusChanged('loading');
-    });
+    if (jwt == null || character == null) {
+      return;
+    }
 
-    mediator.registerHandler('Server::OnSocketOpen', () => {
-      this.props.ServerStatusChanged('connected');
-    });
-
-    mediator.registerHandler('Character::Loaded', () => {
-      this.props.CharacterLoaded();
-    });
-
-    mediator.registerHandler('Ground::Loaded', () => {
-      this.props.GroundLoaded();
-    });
-
-    const renderer = this.container.get<Renderer>("Renderer");
-    renderer.start();
-    
-    const server = this.container.get<Server>("Server");
-    server.connect();
+    this.props.ThunkStartEngine();
   }
 
   render() {
     return (
       <main>
         {this.isLoaded() === false ? <LoadingModal /> : null}
+        {this.props.characterLoaded === false ? <Characters /> : null}
         <div id="grid_layout">
+          <TopPanel />
+          <LeftPanel />
           <GameWindow />
           <BottomPanel />
         </div>

@@ -25,7 +25,7 @@ export class Server {
             this.mediator.publish({
                 type: 'Server::OnSocketOpen',
                 data: event
-            });
+            }, { useReduxDispatch: true });
 
             this.mediator.publish({
                 type: 'Server::SendMessage',
@@ -43,7 +43,7 @@ export class Server {
             this.mediator.publish({
                 type: 'Server::OnSocketClose',
                 data: event
-            });
+            }, { useReduxDispatch: true });
         }
 
         this.webSocket.onmessage = (event: MessageEvent) => {

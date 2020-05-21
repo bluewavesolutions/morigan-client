@@ -1,0 +1,29 @@
+.chat-container {
+    height: calc(100vh - 96px);
+}
+
+.chat-wrapper {
+    height: calc(100% - 18px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+.chat-messages {
+    flex: 1;
+    transform: scale(1, -1);
+    overflow: auto;
+}
+
+.chat-buffer {
+    display: flex;
+    flex-flow: column-reverse;
+}
+
+.chat-message {
+    transform: scale(1, -1);
+}
+
+.chat-input {
+    height: 18px;
+}
