@@ -1,11 +1,29 @@
-#chat {
-    width:100%;
-    height: 100%;
+.chat-container {
+    height: calc(100vh - 96px);
 }
 
-#chat_messages {
-    height: 50%;
-    width: 100%;
-    word-wrap: break-word;
-    overflow-y: scroll;
+.chat-wrapper {
+    height: calc(100% - 18px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+.chat-messages {
+    flex: 1;
+    transform: scale(1, -1);
+    overflow: auto;
+}
+
+.chat-buffer {
+    display: flex;
+    flex-flow: column-reverse;
+}
+
+.chat-message {
+    transform: scale(1, -1);
+}
+
+.chat-input {
+    height: 18px;
 }

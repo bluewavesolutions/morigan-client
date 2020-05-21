@@ -22,29 +22,35 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 class Chat extends Component<PropsFromRedux> {
     render() {
         return (
-            <div id="chat">
-                <div id="chat_messages">
-                    {this.props.messages.map(e => (
-                        <div className="chat_message">
-                            <small>[{e.Time}]</small> {e.Nick}: {e.Message}
+            <div className="chat-container">
+                <div className="chat-wrapper">
+                    <div className="chat-messages">
+                        <div className="chat-buffer">
+                            {this.props.messages.map(e => (
+                                <div className="chat-message">
+                                    <small>[{e.Time}]</small> {e.Nick}: {e.Message}
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
                 </div>
-                <input type="text"
-                    value={this.props.chatMessage}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) => this.props.UpdateChatMessage(event.target.value)}
-                    onFocus={() => this.props.ChangeKeyboardManagerStatus('locked')}
-                    onBlur={() => this.props.ChangeKeyboardManagerStatus('unlocked')} />
-                <button onClick={async () => {
-                    this.props.SendChatMessage({
-                        message: this.props.chatMessage
-                    });
+                <div className="chat-input">
+                    <input type="text"
+                        value={this.props.chatMessage}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => this.props.UpdateChatMessage(event.target.value)}
+                        onFocus={() => this.props.ChangeKeyboardManagerStatus('locked')}
+                        onBlur={() => this.props.ChangeKeyboardManagerStatus('unlocked')} />
+                    <button onClick={async () => {
+                        this.props.SendChatMessage({
+                            message: this.props.chatMessage
+                        });
 
-                    const element = document.getElementById("chat_messages");
-                    element.scrollTop = element.scrollHeight;
-                }}>
-                    Send
-                </button>
+                        const element = document.getElementsByClassName("chat-wrapper")[0];
+                        element.scrollTop = element.scrollHeight;
+                    }}>
+                        Send
+                    </button>
+                </div>
             </div>
         )
     }
