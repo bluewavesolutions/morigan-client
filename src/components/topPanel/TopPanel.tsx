@@ -15,7 +15,9 @@ class TopPanel extends Component<PropsFromRedux> {
     render() {
         return (
             <div id="top_panel">
-                {this.props.nick}
+                <div className="nick-panel">
+                    <b className="nick">{this.props.nick}</b>
+                </div>
             </div>
         )
     }

@@ -40,7 +40,7 @@ class Chat extends Component<PropsFromRedux> {
                         onChange={(event: ChangeEvent<HTMLInputElement>) => this.props.UpdateChatMessage(event.target.value)}
                         onFocus={() => this.props.ChangeKeyboardManagerStatus('locked')}
                         onBlur={() => this.props.ChangeKeyboardManagerStatus('unlocked')} />
-                    <button onClick={async () => {
+                    <div className="button green flat" onClick={async () => {
                         this.props.SendChatMessage({
                             message: this.props.chatMessage
                         });
@@ -48,8 +48,8 @@ class Chat extends Component<PropsFromRedux> {
                         const element = document.getElementsByClassName("chat-wrapper")[0];
                         element.scrollTop = element.scrollHeight;
                     }}>
-                        Send
-                    </button>
+                        >
+                    </div>
                 </div>
             </div>
         )
