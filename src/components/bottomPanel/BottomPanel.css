@@ -1,9 +1,0 @@
-#bottom_panel { 
-    grid-area: bottom_panel; 
-    background-image: url('/panel_bottom_top.png');
-    background-position: center top;
-    background-size: 100% 100%;
-    border-top: 4px solid #8b8b8b;
-    display: flex;
-    align-items: center;
-}

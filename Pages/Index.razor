@@ -1,0 +1,26 @@
+﻿@page "/"
+@inject MoriganBlazorClient.Application.Client.GameEngineClient GameEngineClient
+@inject MoriganBlazorClient.Application.Managers.KeyboardManager KeyboardManager
+@inject MoriganBlazorClient.Application.Bridge.JsEngineBridge JsEngineBridge
+@inject MoriganBlazorClient.Application.Renderer.Renderer Renderer;
+@inject IJSRuntime JSRuntime
+
+<canvas id="canvas" width="800" height="600"></canvas>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GameEngineClient.Start();
+            await LoadScripts();
+            await Renderer.Initialize();
+        }
+    }
+
+    private async Task LoadScripts() 
+    {
+        await JSRuntime.InvokeVoidAsync("engine.initialize", DotNetObjectReference.Create(JsEngineBridge));
+        await JSRuntime.InvokeVoidAsync("engine.keyboardManager", DotNetObjectReference.Create(KeyboardManager));
+    }
+}

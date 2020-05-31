@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MoriganBlazorClient</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+
+<body>
+    <app>Loading...</app>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/Blazor.Extensions.Canvas/blazor.extensions.canvas.js"></script>
+    <script>
+        window.engine = {
+            images: [],
+            initialize: function (dotnet) {
+                window.addEventListener('resize', () => {
+                    dotnet.invokeMethodAsync('WindowResize', window.innerWidth, window.innerHeight);
+                    window.engine.resizeCanvas();
+                });
+
+                dotnet.invokeMethodAsync('WindowResize', window.innerWidth, window.innerHeight);
+                window.engine.resizeCanvas();
+            },
+            resizeCanvas: function() {
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+
+                canvas.width = width * window.devicePixelRatio;
+                canvas.height = height * window.devicePixelRatio;
+
+                context.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+                canvas.style.width = `${width}px`;
+                canvas.style.height = `${height}px`;
+            },
+            keyboardManager: function(dotnet) {
+                window.addEventListener('keydown', (ev) => {
+                    dotnet.invokeMethodAsync('OnKeyDown', ev.key);
+                });
+
+                window.addEventListener('keyup', (ev) => {
+                    dotnet.invokeMethodAsync('OnKeyUp', ev.key);
+                });
+            },
+            loadImage: function(src) {
+                var imageObject = {
+                    id: src,
+                    image: new Image()
+                };
+
+                imageObject.image.src = src;
+
+                window.engine.images.push(imageObject);
+            },
+            renderer: function(dotnet, time) {
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+
+                context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+                dotnet.invokeMethodAsync('Render', time).then(elements => {
+                    for(let element of elements) {
+                        switch (element.type) {
+                            case 'image':
+                                const source = element.source;
+                                const imageObject = window.engine.images.find(e => e.id == source);
+                                if(imageObject === undefined) {
+                                    continue;
+                                }
+                                
+                                context.drawImage(imageObject.image, 
+                                    element.dx, 
+                                    element.dy, 
+                                    element.dWidth,
+                                    element.dHeight,
+                                    element.sx,
+                                    element.sy,
+                                    element.sWidth,
+                                    element.sHeight);
+                            break;
+                        }
+                    }
+                });
+
+                window.requestAnimationFrame((time) => {
+                    window.engine.renderer(dotnet, time);
+                })
+            },
+            renderImage: function(context, image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+                console.log(context);
+                context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+            }
+        };
+    </script>
+</body>
+
+</html>
