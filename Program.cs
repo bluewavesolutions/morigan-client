@@ -10,6 +10,7 @@ using MoriganBlazorClient.Application.Bridge;
 using MoriganBlazorClient.Application.Components;
 using MoriganBlazorClient.Application.Managers;
 using MoriganBlazorClient.Application.Renderer;
+using MoriganBlazorClient.Application.Animations;
 
 namespace MoriganBlazorClient
 {
@@ -24,6 +25,7 @@ namespace MoriganBlazorClient
             builder.Services.AddScoped<JsEngineBridge>();
             builder.Services.AddScoped<GameEngineClient>();
             builder.Services.AddScoped<KeyboardManager>();
+            builder.Services.AddScoped<AnimationManager>();
             builder.Services.AddScoped<Camera>();
             builder.Services.AddScoped<Renderer>();
             builder.Services.AddScoped<Ground>();

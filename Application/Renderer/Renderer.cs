@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
+using MoriganBlazorClient.Application.Animations;
 using MoriganBlazorClient.Application.Components;
 
 namespace MoriganBlazorClient.Application.Renderer
@@ -13,11 +14,17 @@ namespace MoriganBlazorClient.Application.Renderer
 
         private readonly Character _character;
 
-        public Renderer(IJSRuntime jsRuntime, Ground ground, Character character)
+        private readonly AnimationManager _animationManager;
+
+        public Renderer(IJSRuntime jsRuntime, 
+            Ground ground,
+            Character character, 
+            AnimationManager animationManager)
         {
             _jsRuntime = jsRuntime;
             _ground = ground;
             _character = character;
+            _animationManager = animationManager;
         }
 
         public async Task Initialize() 
@@ -28,6 +35,8 @@ namespace MoriganBlazorClient.Application.Renderer
         [JSInvokable("Render")]
         public List<object> Render(double time) 
         {
+            _animationManager.Update(time);
+
             return new List<object> {
                 _ground.RenderImage(time),
                 _character.RenderImage(time)

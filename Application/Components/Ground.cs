@@ -48,13 +48,11 @@ namespace MoriganBlazorClient.Application.Components
 
         public object RenderImage(double time) 
         {
-            var (cameraPositionX, cameraPositionY) = _camera.GetPosition();
-
             return new {
                 type = "image",
                 source = ResourceFile,
-                sx = (cameraPositionX * 32),
-                sy = (cameraPositionY * 32),
+                sx = (_camera.CanvasPositionX),
+                sy = (_camera.CanvasPositionY),
                 sWidth = WidthInPixels, 
                 sHeight = HeightInPixels, 
                 dx = 0, 

@@ -1,9 +1,12 @@
-using MediatR;
+using MoriganBlazorClient.Application.Animations;
+using MoriganBlazorClient.Application.Animations.Interfaces;
 
 namespace MoriganBlazorClient.Application.Components
 {
-    public class Camera
+    public class Camera : IAnimatedCanvasPosition
     {
+        private readonly AnimationManager _animationManager;
+
         private long _positionX { get; set; }
 
         private long _positionY { get; set; }
@@ -16,9 +19,15 @@ namespace MoriganBlazorClient.Application.Components
 
         private long _maxY { get; set; }
 
-        public Camera()
+        public double CanvasPositionX { get; set; }
+
+        public double CanvasPositionY { get; set; }
+
+        public Camera(AnimationManager animationManager)
         {
             System.Console.WriteLine($"{nameof(Camera)}->ctor");
+            
+            _animationManager = animationManager;
         }
 
         public void SetWindowDimensions(long width, long height) 
@@ -50,6 +59,8 @@ namespace MoriganBlazorClient.Application.Components
 
             _positionX = positionX;
             _positionY = positionY;
+
+            _animationManager.Animate(this, positionX * 32, positionY * 32, 850);
         }
 
         public void CalculateMaxValues(Ground ground) 
@@ -73,7 +84,5 @@ namespace MoriganBlazorClient.Application.Components
             _maxX = -groundWidth + x - offsetX;
             _maxY = -groundHeight + y - offsetY;
         }
-
-        public (long positionX, long positionY) GetPosition() => (_positionX, _positionY);
     }
 }
