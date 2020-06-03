@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.JSInterop;
 using MoriganBlazorClient.Application.Animations;
 using MoriganBlazorClient.Application.Animations.Interfaces;
 using MoriganBlazorClient.Application.Client.Models;
+using MoriganBlazorClient.Application.Commands;
 using MoriganBlazorClient.Application.Components.Interfaces;
 using MoriganBlazorClient.Application.Renderer.Interfaces;
 
@@ -10,6 +12,8 @@ namespace MoriganBlazorClient.Application.Components
 {
     public class Character : IRenderableImage, IMovable, IAnimatedCanvasPosition
     {
+        private readonly IMediator _mediator;
+        
         private readonly IJSRuntime _jsRuntime;
 
         private readonly Camera _camera;
@@ -40,10 +44,11 @@ namespace MoriganBlazorClient.Application.Components
 
         private long _stepY { get; set; }
 
-        public Character(IJSRuntime jsRuntime, Camera camera, AnimationManager animationManager)
+        public Character(IMediator mediator, IJSRuntime jsRuntime, Camera camera, AnimationManager animationManager)
         {     
             System.Console.WriteLine($"{nameof(Character)}->ctor");
 
+            _mediator = mediator;
             _jsRuntime = jsRuntime;
             _camera = camera;
             _animationManager = animationManager;
@@ -138,12 +143,14 @@ namespace MoriganBlazorClient.Application.Components
 
             if (string.IsNullOrWhiteSpace(direction) == false)
             {
-                _animationManager.Animate(this, posX * 32, posY * 32, 220);
+                _animationManager.Animate(this, posX * 32, posY * 32, 225);
 
                 PositionX = posX;
                 PositionY = posY;
 
                 _camera.CenterToCharacter(this);
+
+                await _mediator.Publish(new MoveCommand(PositionX, PositionY));
             }
         }
     }

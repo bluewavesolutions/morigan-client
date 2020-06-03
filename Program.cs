@@ -26,6 +26,7 @@ namespace MoriganBlazorClient
             builder.Services.AddScoped<GameEngineClient>();
             builder.Services.AddScoped<KeyboardManager>();
             builder.Services.AddScoped<AnimationManager>();
+            builder.Services.AddScoped<OtherCharactersManager>();
             builder.Services.AddScoped<Camera>();
             builder.Services.AddScoped<Renderer>();
             builder.Services.AddScoped<Ground>();

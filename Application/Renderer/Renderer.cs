@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using MoriganBlazorClient.Application.Animations;
 using MoriganBlazorClient.Application.Components;
+using MoriganBlazorClient.Application.Managers;
 
 namespace MoriganBlazorClient.Application.Renderer
 {
@@ -14,16 +15,20 @@ namespace MoriganBlazorClient.Application.Renderer
 
         private readonly Character _character;
 
+        private readonly OtherCharactersManager _otherCharactersManager;
+
         private readonly AnimationManager _animationManager;
 
         public Renderer(IJSRuntime jsRuntime, 
             Ground ground,
-            Character character, 
+            Character character,
+            OtherCharactersManager otherCharactersManager,
             AnimationManager animationManager)
         {
             _jsRuntime = jsRuntime;
             _ground = ground;
             _character = character;
+            _otherCharactersManager = otherCharactersManager;
             _animationManager = animationManager;
         }
 
@@ -37,10 +42,14 @@ namespace MoriganBlazorClient.Application.Renderer
         {
             _animationManager.Update(time);
 
-            return new List<object> {
+            var renderList =  new List<object> {
                 _ground.RenderImage(time),
                 _character.RenderImage(time)
             };
+
+            renderList.AddRange(_otherCharactersManager.RenderImages());
+
+            return renderList;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace MoriganBlazorClient.Application.Client
             await websocketClient.Start();
             SendData<object>("LOAD_GAME", new { 
                 Jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiZW1haWwiOiJzb25xdWVyQG8yLnBsIiwicm9sZSI6IkFkbWluaXN0cmF0b3IiLCJuYmYiOjE1OTEyMDc3MzMsImV4cCI6MTU5MTI5NDEzMywiaWF0IjoxNTkxMjA3NzMzLCJpc3MiOiJtb3JpZ2FuX2lkZW50aXR5IiwiYXVkIjoibW9yaWdhbl9pZGVudGl0eSJ9.OUYgaoDK72j-1fS2FfOiVfBsDa9YfNOgGTOVIqxii6E",
-                Character = 1
+                CharacterId = 2
             });
         }
 
